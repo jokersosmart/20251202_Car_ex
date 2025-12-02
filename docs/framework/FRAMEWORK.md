@@ -1,76 +1,76 @@
-# ISO 26262 + ASPICE Feature Specification Framework
+# ISO 26262 + ASPICE 特性規格框架
 
-**Standards**: ISO 26262 ASIL-B + ASPICE Capability Level 3  
-**Version**: 1.0.0  
-**Last Updated**: 2025-12-02  
-**Author**: SSD Controller Development Team
+**標準**：ISO 26262 ASIL-B + ASPICE 能力等級 3  
+**版本**：1.0.0  
+**最後更新**：2025-12-02  
+**作者**：SSD 控制器開發團隊
 
-## Overview
+## 概述
 
-This framework establishes a comprehensive feature specification methodology combining ISO 26262 functional safety and ASPICE process maturity requirements. It ensures complete requirements traceability, automated change impact analysis, and rigorous verification throughout the development lifecycle.
+此框架建立了結合 ISO 26262 功能安全和 ASPICE 流程成熟度要求的綜合特性規格方法論。它確保完整的需求可追蹤性、自動化變更影響分析和整個開發生命週期的嚴格驗證。
 
-## Core Components
+## 核心組件
 
-### 1. Requirements Hierarchy (ISO 26262 Compliant)
+### 1. 需求階層 (符合 ISO 26262)
 
-All features follow this hierarchical structure:
+所有特性都遵循此階層結構：
 
 ```
-Safety Goals (SG-XXX-YY)
-  └─ Functional Safety Requirements (FSR-XXX-YY)
-      └─ System Requirements (SYS-REQ-XXX-YYY)
-          ├─ Technical Safety Requirements - Hardware (TSR-HW-XXX-YYY)
-          │   └─ Hardware Design → RTL Code → Hardware Test Cases
-          └─ Technical Safety Requirements - Software (TSR-SW-XXX-YYY)
-              └─ Software Design → Source Code → Software Test Cases
+安全目標 (SG-XXX-YY)
+  └─ 功能安全需求 (FSR-XXX-YY)
+      └─ 系統需求 (SYS-REQ-XXX-YYY)
+          ├─ 技術安全需求 - 硬體 (TSR-HW-XXX-YYY)
+          │   └─ 硬體設計 → RTL 代碼 → 硬體測試用例
+          └─ 技術安全需求 - 軟體 (TSR-SW-XXX-YYY)
+              └─ 軟體設計 → 源代碼 → 軟體測試用例
 ```
 
-Each level inherits the ASIL from its parent and maintains bidirectional traceability.
+每個級別都從其父級繼承 ASIL 並維持雙向可追蹤性。
 
-### 2. Feature Identification
+### 2. 特性識別
 
-Every feature receives:
-- **Unique ID**: Auto-incremented (001, 002, 003...)
-- **ASIL Level**: A, B, C, D, or QM (Quality Managed)
-- **Component Type**: Hardware, Firmware, or System
-- **Status**: Planning → Development → Review → Complete
-- **Owner**: Primary responsible engineer
-- **Stakeholders**: Technical Lead, Safety Manager, QA
+每個特性都會收到：
+- **唯一 ID**：自動遞增 (001, 002, 003...)
+- **ASIL 等級**：A、B、C、D 或 QM (品質管理)
+- **組件類型**：硬體、韌體或系統
+- **狀態**：計畫中 → 開發中 → 審查中 → 完成
+- **所有者**：主要責任工程師
+- **利害關係人**：技術主管、安全經理、QA
 
-### 3. Bidirectional Traceability
+### 3. 雙向可追蹤性
 
-**Forward Traceability (Top-Down):**
-- Ensures all requirements are implemented
-- Traces: Goal → Requirement → Design → Code → Test
-- Verifies 100% requirement coverage
+**正向可追蹤性 (自上而下)：**
+- 確保所有需求都已實施
+- 追蹤：目標 → 需求 → 設計 → 代碼 → 測試
+- 驗證 100% 需求涵蓋率
 
-**Backward Traceability (Bottom-Up):**
-- Ensures no orphan code or tests
-- Traces: Test → Code → Design → Requirement → Goal
-- Identifies untraced implementation
+**反向可追蹤性 (自下而上)：**
+- 確保沒有孤立代碼或測試
+- 追蹤：測試 → 代碼 → 設計 → 需求 → 目標
+- 識別未追蹤的實施
 
-**Automated Traceability Matrix:**
-- Tracks status of each link
-- Identifies coverage gaps
-- Generates compliance reports
+**自動化可追蹤性矩陣：**
+- 追蹤每個連結的狀態
+- 識別覆蓋率差距
+- 生成合規報告
 
-### 4. File Organization
+### 4. 檔案組織
 
 ```
 specs/XXX-feature-name/
-├── spec.md                      # Feature overview
-├── requirements.md              # All requirements (SG, FSR, TSR)
-├── architecture.md              # System/HW/SW architecture
-├── detailed-design.md           # Algorithms, FSM, detailed design
-├── unit-test-spec.md            # Unit test specification
-├── integration-test-spec.md    # Integration test specification
-├── system-test-spec.md         # System test specification
-├── fmea.md                     # Failure Mode & Effects Analysis
-├── fta.md                      # Fault Tree Analysis
-├── dfa.md                      # Dependent Failure Analysis
-├── traceability.md             # Feature-level traceability matrix
-├── change-log.md               # Change history and impacts
-├── plan.md                     # Implementation plan
+├── spec.md                      # 特性概述
+├── requirements.md              # 所有需求 (SG, FSR, TSR)
+├── architecture.md              # 系統/硬體/軟體架構
+├── detailed-design.md           # 演算法、FSM、詳細設計
+├── unit-test-spec.md            # 單元測試規格
+├── integration-test-spec.md     # 整合測試規格
+├── system-test-spec.md          # 系統測試規格
+├── fmea.md                      # 失效模式與影響分析
+├── fta.md                       # 故障樹分析
+├── dfa.md                       # 相關失效分析
+├── traceability.md              # 特性級可追蹤性矩陣
+├── change-log.md                # 變更歷史和影響
+├── plan.md                      # 實施計畫
 └── review-records/
     ├── requirements-review.md
     ├── design-review.md
@@ -78,168 +78,207 @@ specs/XXX-feature-name/
     └── verification-review.md
 ```
 
-### 5. Safety Analysis Integration (ISO 26262-9)
+### 5. 安全性分析整合 (ISO 26262-9)
 
-Integrated safety analysis documents:
+**FMEA (失效模式與影響分析)**
+- 識別所有潛在失效模式
+- 評估嚴重性、發生和檢測 (SOD)
+- 計算風險優先數 (RPN)
+- 為高風險項目提議減輕方案
 
-- **FMEA**: Failure Mode identification, severity/occurrence/detection rating, RPN calculation
-- **FTA**: Fault tree construction, cut set analysis, probability assessment
-- **DFA**: Common cause failure identification, cascading failure analysis
+**FTA (故障樹分析)**
+- 從頂級不良事件開始
+- 識別導致失效的原因鏈
+- 計算最小割集
+- 估計頂級事件的概率
 
-### 6. Change Impact Analysis System
+**DFA (相關失效分析)**
+- 識別共同原因失效 (CCF)
+- 分析連鎖失效情景
+- 開發減輕策略
 
-Automated detection when:
-- **Requirements change**: Identifies affected design, code, tests, safety analysis
-- **Design changes**: Verifies requirement satisfaction, triggers test updates
-- **Implementation changes**: Updates coverage, triggers test re-execution
-- **Test changes**: Updates specification, maintains traceability
-
-### 7. Review and Approval Workflow
-
-Four-stage review process:
-
-1. **Requirements Review**: Completeness, consistency, verifiability, traceability
-2. **Design Review**: Requirement coverage, design quality, testability
-3. **Code Review**: Coding standards, traceability, test coverage
-4. **Verification Review**: Test coverage, test results, defect closure
-
-All reviews documented with sign-off records.
-
-### 8. Verification Strategy (ASPICE SWE.4, HWE.4)
-
-- **Unit Verification**: 100% statement + branch coverage (ASIL-B)
-- **Integration Verification**: Interface testing per integration strategy
-- **System Verification**: System test cases from requirements
-- **Qualification Verification**: Customer acceptance criteria
-
-### 9. Automation Scripts
-
-PowerShell scripts for:
-
-- **create-feature.ps1**: Auto-generate feature structure with templates
-- **check-change-impact.ps1**: Analyze change propagation
-- **check-traceability.ps1**: Verify traceability completeness
-- **check-requirements-coverage.ps1**: Identify missing implementation/tests
-- **check-verification-status.ps1**: Report verification metrics
-
-### 10. Git Integration
-
-- **Pre-commit hooks**: Validate traceability tags, verify matrix updates
-- **Pull request checks**: Enforce traceability, coverage, documentation
-- **CI/CD integration**: Automated traceability validation, coverage reporting
-
-## Process Flow
+### 6. ASIL 繼承規則
 
 ```
-1. Feature Creation
-   ↓
-2. Requirements Analysis (ISO 26262 SYS.2/SWE.1)
-   ├─ Safety Goals
-   ├─ FSR (Functional Safety Requirements)
-   ├─ System Requirements
-   └─ TSR (Technical Safety Requirements)
-   ↓
-3. Requirements Review & Approval
-   ├─ Completeness check
-   ├─ Consistency verification
-   ├─ Traceability validation
-   └─ Stakeholder sign-off
-   ↓
-4. Architecture Design (SYS.3, SWE.2, HWE.2)
-   ├─ System architecture
-   ├─ HW/SW decomposition
-   └─ Interface definition
-   ↓
-5. Design Review & Approval
-   ├─ Requirement coverage
-   ├─ Design quality
-   └─ Testability assessment
-   ↓
-6. Detailed Design (SWE.3, HWE.3)
-   ├─ Component design
-   ├─ Algorithm specification
-   └─ Safety mechanism design
-   ↓
-7. Implementation
-   ├─ Hardware (RTL/Verilog)
-   ├─ Firmware (MISRA C:2012)
-   └─ Maintain traceability tags
-   ↓
-8. Code Review & Approval
-   ├─ Coding standards compliance
-   ├─ Traceability tag verification
-   └─ Test coverage assessment
-   ↓
-9. Verification
-   ├─ Unit tests (100% coverage)
-   ├─ Integration tests
-   ├─ System tests
-   └─ Qualification tests
-   ↓
-10. Verification Review & Approval
-    ├─ Test results analysis
-    ├─ Coverage metrics
-    └─ Defect closure verification
-    ↓
-11. Baseline & Release
-    ├─ Final traceability matrix
-    ├─ Configuration management
-    └─ Archival for product lifecycle
+安全目標 (SG)：ASIL-B
+  ↓
+FSR：ASIL-B (繼承，無法降低)
+  ↓
+SYS-REQ：ASIL-B (繼承，無法降低)
+  ↓
+TSR-HW/SW：ASIL-B (繼承，無法降低)
+  ↓
+所有實施必須達到 ASIL-B 標準
+  (設計、代碼、測試、驗證)
 ```
 
-## Compliance Standards
+### 7. 品質關卡
 
-### ISO 26262 Compliance
+每個階段都有明確的通過/失敗標準：
 
-- **Part 4/5/6**: Verification methods (testing, analysis, inspection, demonstration)
-- **Part 8**: Requirement specification and documentation
-- **Part 9**: ASIL decomposition, safety analysis (FMEA, FTA, DFA)
-- **Clause 5**: Complete requirements traceability
-- **Clause 10**: Documentation requirements
+| 關卡 | 標準 | 所有者 |
+|------|------|--------|
+| **初始化** | 範圍批准、ASIL 分配 | 技術主管 |
+| **需求** | 100% 可追蹤、利害關係人批准 | 需求主管 + 安全經理 |
+| **設計** | 涵蓋所有需求、DFT 計畫 | 架構師 + 技術主管 |
+| **安全** | FMEA/FTA/DFA 完成、風險可接受 | 安全經理 |
+| **實施** | 代碼審查、100% 涵蓋率 | 技術主管 + 同儕 |
+| **驗證** | 所有測試通過、可追蹤性完整 | 測試主管 + QA |
+| **發佈** | 所有批准已獲得、已基線化 | PM + 安全經理 |
 
-### ASPICE Compliance
+### 8. 自動化支援
 
-- **SYS.1-5**: System engineering processes
-- **SWE.1-6**: Software engineering processes
-- **HWE.1-5**: Hardware engineering processes (when applicable)
-- **SUP.2**: Verification and validation
-- **SUP.8**: Configuration management
-- **SUP.9**: Problem resolution management
-
-## Key Features
-
-✅ **Automatic Feature ID Generation**: Sequential numbering ensures uniqueness  
-✅ **ASIL Inheritance**: Child requirements inherit parent ASIL levels  
-✅ **Bidirectional Traceability**: Forward and backward traceability validation  
-✅ **Change Impact Analysis**: Automated propagation detection  
-✅ **Safety Analysis Templates**: FMEA, FTA, DFA integrated  
-✅ **100% Coverage Requirement**: Enforces comprehensive verification  
-✅ **Peer Review Workflow**: Structured review and sign-off process  
-✅ **Git Integration**: Hooks and CI/CD integration for automation  
-✅ **Metrics & Reporting**: Comprehensive status and compliance reports  
-
-## Documentation Structure
-
-- **Framework**: This master documentation file
-- **Templates**: Standardized document templates
-- **Guides**: User guides, process guides, tool guides
-- **Examples**: Complete example features with all documentation
-
-## Getting Started
-
-1. Read the **Framework Overview** (this document)
-2. Review **Feature Creation Guide** in `/guides/`
-3. Use PowerShell scripts to create new features: `create-feature.ps1`
-4. Follow the **Requirements Template** in `/templates/`
-5. Maintain traceability using **Traceability Matrix** template
-6. Execute scripts to validate completeness and coverage
-
-## Version History
-
-| Version | Date | Changes |
-|---------|------|---------|
-| 1.0.0 | 2025-12-02 | Initial framework with ISO 26262 + ASPICE integration |
+**PowerShell 指令碼：**
+- `create-feature.ps1` - 生成特性結構
+- `check-traceability.ps1` - 驗證雙向可追蹤性
+- `check-change-impact.ps1` - 分析變更傳播 (計畫中)
+- `check-requirements-coverage.ps1` - 生成覆蓋率報告 (計畫中)
+- `check-verification-status.ps1` - 驗證指標儀表板 (計畫中)
 
 ---
 
-**Next Steps**: See [Feature Creation Guide](guides/FEATURE-CREATION-GUIDE.md) to create your first feature.
+## 流程模型
+
+### 7 階段特性生命週期
+
+```
+第 1 階段 (1-2 天)        第 2 階段 (3-5 天)        第 3 階段 (4-7 天)
+  初始化      ──────→     需求分析     ──────→     架構與設計
+    ↓                        ↓                          ↓
+  範圍確立               SG/FSR/TSR              系統架構
+  ASIL 確定               生成                  詳細設計
+  目錄建立              可追蹤性                時序分析
+    ↓                     初始化                    ↓
+    
+第 4 階段 (3-5 天)        第 5 階段 (8-14 天)      第 6 階段 (2-3 天)
+  安全性分析     ──────→    實施與驗證    ──────→    審查與批准
+    ↓                          ↓                        ↓
+  FMEA/FTA/DFA              RTL 代碼                設計審查
+  風險評估                  C 代碼                  代碼審查
+  減輕方案                  單元/整合               驗證審查
+                            系統測試               簽署批准
+                              ↓
+                              
+第 7 階段 (1 天)
+  基線與發佈
+    ↓
+  Git 標籤
+  存檔
+  文檔定稿
+```
+
+### ASPICE 流程映射
+
+**系統工程 (SYS.1-5)**：
+- SYS.1 - 系統需求分析 → 特性第 2 階段
+- SYS.2 - 系統架構設計 → 特性第 3 階段
+- SYS.3 - 系統詳細設計 → 特性第 3 階段
+- SYS.4 - 系統單元驗證 → 特性第 5 階段
+- SYS.5 - 系統整合驗證 → 特性第 5 階段
+
+**軟體工程 (SWE.1-6)**：
+- SWE.1 - 軟體需求分析 → 特性第 2 階段
+- SWE.2 - 軟體架構設計 → 特性第 3 階段
+- SWE.3 - 軟體詳細設計 → 特性第 3 階段
+- SWE.4 - 軟體單元實施和驗證 → 特性第 5 階段
+- SWE.5 - 軟體整合和驗證 → 特性第 5 階段
+- SWE.6 - 軟體系統集成和驗證 → 特性第 5 階段
+
+**硬體工程 (HWE.1-5)**：
+- HWE.1 - 硬體需求分析 → 特性第 2 階段
+- HWE.2 - 硬體設計 → 特性第 3 階段
+- HWE.3 - 硬體詳細設計 → 特性第 3 階段
+- HWE.4 - 硬體實施和驗證 → 特性第 5 階段
+- HWE.5 - 硬體整合和驗證 → 特性第 5 階段
+
+**支援流程 (SUP)**：
+- SUP.2 - 配置管理 → 整個生命週期 (Git)
+- SUP.8 - 配置管理 → 所有工作產品
+- SUP.9 - 問題解決 → 缺陷追蹤
+- SUP.10 - 變更管理 → 第 2-6 階段
+
+---
+
+## 合規性覆蓋
+
+### ISO 26262-1:2018 對應
+
+| 項目 | 涵蓋範圍 |
+|------|--------|
+| 概念 | 功能安全、ASIL、安全目標、FSR、TSR |
+| 要求 | 特性 ID、ASIL、責任、簽署 |
+| 方法論 | FMEA/FTA/DFA、故障假設 |
+| 設計 | 架構、詳細設計、設計標準 (MISRA) |
+| 驗證 | 測試規格、涵蓋率、可追蹤性 |
+
+### ASPICE CL3 對應
+
+| 過程 | 成熟度 | 涵蓋範圍 |
+|------|--------|--------|
+| SYS.1-5 | 3 | 需求到資格認證測試 |
+| SWE.1-6 | 3 | 需求到驗收測試 |
+| HWE.1-5 | 3 | 設計到集成測試 |
+| SUP.2,8,9,10 | 3 | 配置管理、變更管理 |
+
+---
+
+## 指標和報告
+
+### 關鍵績效指標
+
+**需求指標**：
+- 完整性：100% 需求有設計/代碼/測試
+- 追蹤性：100% 雙向可追蹤
+- 波動性：需求變更 % (目標 < 10%)
+
+**測試指標**：
+- 涵蓋率：100% 語句 + 分支 (ASIL-B)
+- 通過率：100% 測試通過
+- 缺陷密度：< 1 缺陷/KLOC
+
+**時程指標**：
+- 計畫 vs 實際：± 20%
+- 里程碑達成率：> 95%
+
+---
+
+## 最佳實踐
+
+✅ **正確做法**
+- 從需求開始，不要跳過
+- 及早涉及安全人員
+- 自動化可追蹤性驗證
+- 持續審查，不要延遲
+- 維護所有工作產品的基線
+
+❌ **常見缺陷**
+- 跳過需求審查
+- 沒有可追蹤性標籤的代碼
+- 代碼涵蓋率不足
+- 未進行安全性分析
+- 變更未進行影響分析
+
+---
+
+## 工具整合
+
+- **版本控制**：Git (分支、標籤、提交訊息)
+- **文檔**：Markdown (標準化格式)
+- **自動化**：PowerShell (指令碼和指標)
+- **測試**：VCS/Questa (HW)、pytest (FW)
+- **分析**：Lint、clang-analyzer (MISRA 合規)
+
+---
+
+## 開始使用
+
+1. **閱讀**：[README.md](README.md) (5 分鐘)
+2. **遵循**：[FEATURE-CREATION-GUIDE.md](guides/FEATURE-CREATION-GUIDE.md) (2-3 小時)
+3. **研究**：[PROCESS-GUIDE.md](guides/PROCESS-GUIDE.md) (1 小時)
+4. **參考**：[templates/](templates/) (按需)
+
+---
+
+**框架版本**：1.0.0  
+**發佈日期**：2025-12-02  
+**下次審查**：2026-03-02
