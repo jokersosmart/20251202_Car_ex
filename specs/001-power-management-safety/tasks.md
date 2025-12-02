@@ -270,7 +270,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 4.1 硬體時鐘監控電路 (RTL)
 
-- [ ] T026 [P] 實現時鐘看門狗計時器 (clock watchdog)
+- [X] T026 [P] 實現時鐘看門狗計時器 (clock watchdog)
   - 位置：[rtl/clock_monitor/clock_watchdog.v](../../../rtl/clock_monitor/clock_watchdog.v)
   - 驗收標準：
     - 監控 400MHz 主時鐘
@@ -278,7 +278,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
     - FAULT_CLK 輸出延遲 < 100ns
     - 複雜度 CC ≤ 10
 
-- [ ] T027 [P] 實現 PLL 健康監控 (frequency out-of-range detection)
+- [X] T027 [P] 實現 PLL 健康監控 (frequency out-of-range detection)
   - 位置：[rtl/clock_monitor/pll_monitor.v](../../../rtl/clock_monitor/pll_monitor.v)
   - 驗收標準：
     - 監控 PLL 輸出頻率
@@ -287,7 +287,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 4.2 軟體時鐘監控服務
 
-- [ ] T028 [P] 實現時鐘監控 ISR
+- [X] T028 [P] 實現時鐘監控 ISR
   - 位置：[firmware/src/clock/clk_event_handler.c](../../../firmware/src/clock/clk_event_handler.c)
   - 驗收標準：
     - 在 CLK_FAULT 中斷上觸發
@@ -295,7 +295,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
     - 設置 fault_flags.clk_fault
     - 可重入
 
-- [ ] T029 [P] 實現時鐘恢復邏輯
+- [X] T029 [P] 實現時鐘恢復邏輯
   - 位置：[firmware/src/clock/clk_monitor_service.c](../../../firmware/src/clock/clk_monitor_service.c)
   - 驗收標準：
     - 檢測時鐘恢復信號
@@ -304,14 +304,14 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 4.3 時鐘硬體驗證 (UVM)
 
-- [ ] T030 [P] 實現時鐘監控功能測試
+- [X] T030 [P] 實現時鐘監控功能測試
   - 位置：[verification/testbench/clock_monitor_tb.sv](../../../verification/testbench/clock_monitor_tb.sv)
   - 驗收標準：
     - 24 個測試用例 (來自 research.md Task 2)
     - SC ≥ 100%, BC ≥ 99%
     - 時鐘停止/恢復場景覆蓋
 
-- [ ] T031 [P] 實現時鐘故障注入測試
+- [X] T031 [P] 實現時鐘故障注入測試
   - 位置：[verification/tests/clock_fault_injection_test.sv](../../../verification/tests/clock_fault_injection_test.sv)
   - 驗收標準：
     - 24 個時鐘監控故障 (SA0, SA1, Delay)
@@ -320,14 +320,14 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 4.4 時鐘軟體驗證 (pytest)
 
-- [ ] T032 [P] 實現時鐘監控單元測試
+- [X] T032 [P] 實現時鐘監控單元測試
   - 位置：[firmware/tests/unit/test_clk_monitor.py](../../../firmware/tests/unit/test_clk_monitor.py)
   - 驗收標準：
     - 15 個單元測試
     - 時鐘狀態機 (正常、停止、恢復)
     - SC ≥ 100%, BC ≥ 100%
 
-- [ ] T033 實現時鐘故障整合測試
+- [X] T033 實現時鐘故障整合測試
   - 位置：[firmware/tests/integration/test_clock_fault_scenarios.py](../../../firmware/tests/integration/test_clock_fault_scenarios.py)
   - 驗收標準：
     - 8 個場景 (停止、恢復、低速、噪聲時鐘)
@@ -336,14 +336,14 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 4.5 時鐘文檔
 
-- [ ] T034 [P] 編寫時鐘監控電路設計文檔
+- [X] T034 [P] 編寫時鐘監控電路設計文檔
   - 位置：[docs/architecture/clock_monitor_design.md](../../../docs/architecture/clock_monitor_design.md)
   - 驗收標準：
     - 看門狗計時器設計說明
     - 時序分析
     - 故障檢測邏輯
 
-- [ ] T035 [P] 創建時鐘安全功能的追蹤矩陣
+- [X] T035 [P] 創建時鐘安全功能的追蹤矩陣
   - 位置：[docs/analysis/traceability_us2.md](../../../docs/analysis/traceability_us2.md)
   - 驗收標準：
     - SG-002 → FSR-002 → SysReq-001 → TSR-002
