@@ -1,0 +1,8 @@
+pytest>=7.0.0
+pytest-cov>=3.0.0
+pytest-timeout>=2.1.0
+pytest-mock>=3.6.1
+gcov-coverage>=1.0.0
+lizard>=1.17.10
+cppcheck-integration>=2.12
+coverage[toml]>=6.0

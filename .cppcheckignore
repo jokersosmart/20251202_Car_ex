@@ -1,0 +1,28 @@
+# cppcheck configuration for C firmware static analysis
+# Quality Gate: No critical/high issues allowed
+
+# Addons
+--addon=misra
+
+# Output format
+--output-file=cppcheck_report.xml
+--xml
+
+# Standard compliance
+--std=c11
+
+# Check all files
+--enable=all
+--inconclusive
+
+# Suppress specific warnings (if any)
+--suppress=missingIncludeSystem
+
+# Libraries (standard C)
+--library=posix
+
+# Force lanuage
+--language=c
+
+# Quiet mode (less verbose)
+# --quiet

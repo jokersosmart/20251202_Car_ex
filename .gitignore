@@ -1,0 +1,84 @@
+# Build artifacts and compilation outputs
+*.o
+*.a
+*.so
+*.exe
+*.dll
+*.dylib
+build/
+bin/
+dist/
+*.obj
+*.lib
+
+# RTL simulation and verification
+work/
+*.vvp
+*.vcd
+*.lxt
+*.fsdb
+obj_dir/
+verilator_coverage.dat
+*.prof
+
+# Python and pytest
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Development environment
+.env
+.env.local
+*.log
+*.log.*
+node_modules/
+
+# Tool-specific
+.gcov*
+*.gcda
+*.gcno
+lizard_output.txt
+cppcheck_report.xml
+
+# Temporary files
+*.tmp
+*.temp
+*.backup
+*.bak
+*.orig
+
+# OS files
+.DS_Store
+Thumbs.db
+*.exe~
+
+# Documentation build
+docs/_build/
+site/
+
+# Common patterns to ignore
+*.swp
+*.swo
+*~
+.#*
+*#
+
+# Verilator-specific
+verilator_coverage.dat
+/obj_dir/
