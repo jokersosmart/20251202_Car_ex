@@ -50,29 +50,29 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 1.1 代碼庫和分支初始化
 
-- [ ] T001 初始化 Git 項目結構並切換到 001-power-management-safety 分支
+- [X] T001 初始化 Git 項目結構並切換到 001-power-management-safety 分支
   - 位置：[.git](../../../.git), [.gitignore](../../../.gitignore)
   - 驗收標準：分支已創建，.gitignore 包含 build/, *.o, *.so, .vscode
 
-- [ ] T002 [P] 創建 RTL 目錄結構 (power_monitor, clock_monitor, memory_protection, top_level)
+- [X] T002 [P] 創建 RTL 目錄結構 (power_monitor, clock_monitor, memory_protection, top_level)
   - 位置：[rtl/](../../../rtl/)
   - 驗收標準：4 個子目錄已創建，每個目錄有 .gitkeep
 
-- [ ] T003 [P] 創建固件目錄結構 (src/, tests/, include/)
+- [X] T003 [P] 創建固件目錄結構 (src/, tests/, include/)
   - 位置：[firmware/](../../../firmware/)
   - 驗收標準：3 個主目錄已創建，tests 包含 unit/, integration/, coverage/
 
-- [ ] T004 [P] 創建驗證/UVM 目錄結構 (testbench/, agents/, tests/, coverage/)
+- [X] T004 [P] 創建驗證/UVM 目錄結構 (testbench/, agents/, tests/, coverage/)
   - 位置：[verification/](../../../verification/)
   - 驗收標準：4 個子目錄已創建，包含示例 .sv 文件
 
 ### 1.2 工具鏈和依賴項安装
 
-- [ ] T005 安裝并驗證 Verilator (用於 RTL 模擬) 和 GCC/Python 環境
+- [X] T005 安裝并驗證 Verilator (用於 RTL 模擬) 和 GCC/Python 環境
   - 位置：[.specify/scripts/](../../../.specify/scripts/)
   - 驗收標準：`verilator --version` 和 `gcc --version` 正常輸出
 
-- [ ] T006 [P] 配置 pytest、gcov、Lizard、cppcheck 進行代碼分析和測試
+- [X] T006 [P] 配置 pytest、gcov、Lizard、cppcheck 進行代碼分析和測試
   - 位置：[firmware/requirements.txt](../../../firmware/requirements.txt)
   - 驗收標準：requirements.txt 包含所有 4 個工具，`pip install -r` 成功
 
