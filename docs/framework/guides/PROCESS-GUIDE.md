@@ -1,580 +1,580 @@
-# Process Guide: Feature Specification Framework
+# 流程指南：特性規格框架
 
-**Purpose**: Detailed process instructions for teams implementing the ISO 26262 + ASPICE framework  
-**Audience**: Process managers, technical leads, quality assurance engineers  
-**Version**: 1.0.0
-
----
-
-## Process Overview
-
-The Feature Specification Framework establishes a structured, traceable approach to developing safety-critical features (SSD controller components) that comply with:
-
-- **ISO 26262-1:2018** - Functional Safety for Automotive Electrical/Electronic Systems
-- **ASPICE CL3** - Automotive Software Process Improvement and Capability Determination (Capability Level 3)
-
-### Seven-Phase Feature Development Lifecycle
-
-```
-Phase 1: Initialization
-  ↓
-Phase 2: Requirements Analysis
-  ↓
-Phase 3: Architecture & Design
-  ↓
-Phase 4: Safety Analysis
-  ↓
-Phase 5: Implementation & Verification
-  ↓
-Phase 6: Review & Approval
-  ↓
-Phase 7: Baseline & Release
-```
+**目的**：實施 ISO 26262 + ASPICE 框架的團隊詳細流程說明  
+**對象**：流程經理、技術主管、品質保證工程師  
+**版本**：1.0.0
 
 ---
 
-## Process Details
+## 流程概述
 
-### Phase 1: Feature Initialization (1-2 days)
+特性規格框架建立了結構化、可追蹤的方法來開發符合以下標準的安全關鍵特性(SSD 控制器組件)：
 
-**Goal**: Establish feature scope, ASIL level, and project structure
+- **ISO 26262-1:2018** - 汽車電氣/電子系統的函數安全性
+- **ASPICE CL3** - 汽車軟體流程改進與能力評估(能力等級 3)
 
-**Inputs**:
-- Hazard Analysis and Risk Assessment (HARA) output
-- Product requirements
-- Customer specifications
+### 七階段特性開發生命週期
 
-**Activities**:
+```
+第 1 階段：初始化
+  ↓
+第 2 階段：需求分析
+  ↓
+第 3 階段：架構與設計
+  ↓
+第 4 階段：安全性分析
+  ↓
+第 5 階段：實施與驗證
+  ↓
+第 6 階段：審查與批准
+  ↓
+第 7 階段：基線與發佈
+```
 
-1. **Define Feature Scope**
-   - What hazard or requirement does this address?
-   - What's in/out of scope?
-   - Any dependencies with other features?
+---
 
-2. **Determine ASIL Level**
-   - From HARA analysis: Severity × Exposure × Controllability
-   - ASIL A (lowest) → D (highest)
-   - SSD safety features typically ASIL-B/C
+## 流程細節
 
-3. **Assign Ownership**
-   - Feature Owner (technical lead)
-   - Requirements Lead
-   - Hardware Lead (if HW component)
-   - Software Lead (if FW component)
-   - Safety Manager
-   - Test Lead
+### 第 1 階段：特性初始化 (1-2 天)
 
-4. **Create Feature Structure**
+**目標**：確立特性範圍、ASIL 等級和專案結構
+
+**輸入**：
+- 危害分析和風險評估 (HARA) 輸出
+- 產品需求
+- 客戶規格
+
+**活動**：
+
+1. **定義特性範圍**
+   - 此特性要解決什麼危害或需求？
+   - 範圍內外涵蓋什麼？
+   - 與其他特性有任何相依性嗎？
+
+2. **確定 ASIL 等級**
+   - 從 HARA 分析：嚴重性 × 曝光度 × 可控性
+   - ASIL A (最低) → D (最高)
+   - SSD 安全特性通常為 ASIL-B/C
+
+3. **分配責任人**
+   - 特性所有者(技術主管)
+   - 需求負責人
+   - 硬體負責人(若有硬體組件)
+   - 軟體負責人(若有韌體組件)
+   - 安全經理
+   - 測試負責人
+
+4. **建立特性結構**
    ```powershell
-   .\create-feature.ps1 -Name "Feature Name" -ASIL "B" -Type "System"
+   .\create-feature.ps1 -Name "特性名稱" -ASIL "B" -Type "System"
    ```
 
-**Outputs**:
-- Feature directory with all templates
-- Feature ID assigned
-- Initial feature overview
+**輸出**：
+- 包含所有範本的特性目錄
+- 已分配特性 ID
+- 初始特性概述
 
-**Review Gate**: Feature Kickoff Review
-- Stakeholders confirm scope and ASIL
-- Resource allocation approved
-- Schedule agreed
+**審查關卡**：特性啟動審查
+- 利害關係人確認範圍和 ASIL
+- 資源配置已批准
+- 進度表已同意
 
 ---
 
-### Phase 2: Requirements Analysis (3-5 days)
+### 第 2 階段：需求分析 (3-5 天)
 
-**Goal**: Establish complete, traceable requirements hierarchy
+**目標**：建立完整、可追蹤的需求階層
 
-**Activities**:
+**活動**：
 
-1. **Define Safety Goals (SG)**
-   - From hazard: What safety outcome must be achieved?
-   - Template: [REQUIREMENTS-TEMPLATE.md](../templates/REQUIREMENTS-TEMPLATE.md)
-   - Stakeholder review required
+1. **定義安全目標 (SG)**
+   - 從危害出發：需要實現什麼安全成果？
+   - 範本：[REQUIREMENTS-TEMPLATE.md](../templates/REQUIREMENTS-TEMPLATE.md)
+   - 需要利害關係人審查
 
-2. **Derive Functional Safety Requirements (FSR)**
-   - What functional capabilities implement safety goals?
-   - Multiple FSRs may implement one SG
-   - Document Type (Detection/Prevention/Mitigation/Recovery)
+2. **衍生函數安全需求 (FSR)**
+   - 什麼功能能力可實現安全目標？
+   - 多個 FSR 可能實現一個 SG
+   - 記錄類型(檢測/預防/減輕/復原)
 
-3. **Develop System Requirements (SYS-REQ)**
-   - What must the system do to implement FSR?
-   - Functional scope, interfaces, constraints
-   - Acceptance criteria (measurable)
+3. **開發系統需求 (SYS-REQ)**
+   - 系統必須做什麼才能實現 FSR？
+   - 功能範圍、介面、限制條件
+   - 驗收標準(可測量)
 
-4. **Allocate Technical Safety Requirements (TSR)**
-   - TSR-HW: Hardware components responsible
-   - TSR-SW: Software/firmware modules responsible
-   - Every SYS-REQ → TSR-HW AND/OR TSR-SW
+4. **配置技術安全需求 (TSR)**
+   - TSR-HW：負責的硬體組件
+   - TSR-SW：負責的軟體/韌體模組
+   - 每個 SYS-REQ → TSR-HW 和/或 TSR-SW
 
-5. **Establish Bidirectional Traceability**
-   - Forward: SG → FSR → SYS-REQ → TSR
-   - Backward: TSR → SYS-REQ → FSR → SG
-   - Use traceability matrix template
+5. **建立雙向可追蹤性**
+   - 正向：SG → FSR → SYS-REQ → TSR
+   - 反向：TSR → SYS-REQ → FSR → SG
+   - 使用可追蹤性矩陣範本
 
-**Key Principle**: Every requirement is ASIL-aware and verifiable
+**關鍵原則**：每個需求都具有 ASIL 意識且可驗證
 
 ```markdown
-SYS-REQ-001-001: Power Detection
-- Derives From: FSR-001-01 (Detect power loss)
-- ASIL: B (inherited from SG)
-- Acceptance Criteria: Detection latency < 1ms
-- Verification Method: Test + Analysis
+SYS-REQ-001-001：電源檢測
+- 衍生自：FSR-001-01 (檢測電源喪失)
+- ASIL：B (繼承自 SG)
+- 驗收標準：檢測延遲 < 1ms
+- 驗證方法：測試 + 分析
 ```
 
-**Outputs**:
-- requirements.md (complete SG/FSR/SYS-REQ/TSR hierarchy)
-- traceability.md (initial traceability matrix)
-- Architecture decisions documented
+**輸出**：
+- requirements.md (完整的 SG/FSR/SYS-REQ/TSR 階層)
+- traceability.md (初始可追蹤性矩陣)
+- 已記錄的架構決策
 
-**Review Gate**: Requirements Review
-- Checklist:
-  - [ ] All requirements clear and unambiguous
-  - [ ] All requirements traceable (forward and backward)
-  - [ ] All acceptance criteria objective and measurable
-  - [ ] ASIL levels correct
-  - [ ] No contradictions between requirements
-  - [ ] All hazards from HARA addressed
-- Approval: Technical Lead + Safety Manager
+**審查關卡**：需求審查
+- 檢查清單：
+  - [ ] 所有需求清楚明確
+  - [ ] 所有需求可追蹤(正向和反向)
+  - [ ] 所有驗收標準客觀且可測量
+  - [ ] ASIL 等級正確
+  - [ ] 需求之間無矛盾
+  - [ ] HARA 中的所有危害已解決
+- 批准：技術主管 + 安全經理
 
 ---
 
-### Phase 3: Architecture & Detailed Design (4-7 days)
+### 第 3 階段：架構與設計 (4-7 天)
 
-**Goal**: Decompose requirements into implementable designs
+**目標**：將需求分解為可實施的設計
 
-**Activities**:
+**活動**：
 
-1. **System Architecture Design**
-   - Block diagrams showing components and interactions
-   - Interface specifications (electrical, logical, timing)
-   - Allocation of requirements to components
+1. **系統架構設計**
+   - 方塊圖顯示組件和互動
+   - 介面規格(電氣、邏輯、時序)
+   - 需求分配給各組件
 
-2. **Hardware Architecture (if applicable)**
-   - RTL module decomposition
-   - Inter-module interfaces
-   - Timing analysis (critical paths)
-   - Design for testability (DFT) features
+2. **硬體架構 (如適用)**
+   - RTL 模組分解
+   - 模組間介面
+   - 時序分析(關鍵路徑)
+   - 設計可測試性 (DFT) 特性
 
-3. **Software Architecture (if applicable)**
-   - Module/function decomposition
-   - Data structures and algorithms
-   - State machines (if applicable)
-   - Resource budgets (memory, CPU, timing)
+3. **軟體架構 (如適用)**
+   - 模組/函式分解
+   - 資料結構和演算法
+   - 狀態機(如適用)
+   - 資源預算(記憶體、CPU、時序)
 
-4. **Detailed Design**
-   - Logic/algorithm pseudocode
-   - Timing verification (WCET analysis)
-   - Safety mechanism implementation details
-   - Error handling strategies
+4. **詳細設計**
+   - 邏輯/演算法虛擬碼
+   - 時序驗證(WCET 分析)
+   - 安全機制實施細節
+   - 錯誤處理策略
 
-5. **Design-to-Requirements Mapping**
-   - Verify each requirement has design implementation
-   - Maintain traceability links
+5. **設計至需求的映射**
+   - 驗證每個需求都有設計實施
+   - 維護可追蹤性連結
 
-**Outputs**:
+**輸出**：
 - architecture.md
 - detailed-design.md
-- Timing analysis reports
-- Design review records
+- 時序分析報告
+- 設計審查記錄
 
-**Review Gate**: Design Review
-- Checklist:
-  - [ ] Architecture addresses all requirements
-  - [ ] Timing constraints satisfied
-  - [ ] Safety mechanisms properly designed
-  - [ ] Design is testable
-  - [ ] Design quality acceptable (ASPICE SWE.2, HWE.2)
-- Approval: Technical Lead + Architects
-
----
-
-### Phase 4: Safety Analysis (3-5 days)
-
-**Goal**: Identify and mitigate failure modes
-
-**Activities**:
-
-1. **FMEA (Failure Mode and Effects Analysis)**
-   - Identify all potential failure modes
-   - Assess severity/occurrence/detection (SOD)
-   - Calculate Risk Priority Number (RPN)
-   - Propose mitigations for high-RPN items
-   - Template: [SAFETY-ANALYSIS-TEMPLATE.md](../templates/SAFETY-ANALYSIS-TEMPLATE.md)
-
-2. **FTA (Fault Tree Analysis)**
-   - Define top-level undesirable event
-   - Construct fault tree showing cause-effect relationships
-   - Identify minimal cut sets
-   - Calculate probability of top event
-
-3. **DFA (Dependent Failure Analysis)**
-   - Identify common cause failures (CCF)
-   - Analyze cascading failure scenarios
-   - Develop mitigation for dependent failures
-
-4. **Traceability: Safety Analysis → Requirements**
-   - Each FMEA mitigation → Implementing requirement
-   - Example: "Dual redundant detectors" → TSR-HW-001-001
-
-**Outputs**:
-- fmea.md (Failure modes with mitigations)
-- fta.md (Fault tree and probability analysis)
-- dfa.md (Common cause and cascading failures)
-
-**Review Gate**: Safety Analysis Review
-- Checklist:
-  - [ ] All failure modes identified
-  - [ ] RPN calculations correct
-  - [ ] High-RPN items have documented mitigations
-  - [ ] Mitigations traced to requirements
-  - [ ] Common cause failures analyzed
-  - [ ] Residual risk acceptable for ASIL level
-- Approval: Safety Manager + Technical Lead
+**審查關卡**：設計審查
+- 檢查清單：
+  - [ ] 架構涵蓋所有需求
+  - [ ] 時序限制得到滿足
+  - [ ] 安全機制設計恰當
+  - [ ] 設計可測試
+  - [ ] 設計品質可接受(ASPICE SWE.2, HWE.2)
+- 批准：技術主管 + 架構師
 
 ---
 
-### Phase 5: Implementation & Verification (8-14 days)
+### 第 4 階段：安全性分析 (3-5 天)
 
-**Goal**: Implement design and verify correctness
+**目標**：識別和減輕失效模式
 
-**Activities**:
+**活動**：
 
-1. **Implementation**
-   - Hardware: RTL code in Verilog/SystemVerilog
-   - Firmware: C code per MISRA C:2012
-   - Maintain traceability tags in code: `@requirement TSR-HW-001-001`
+1. **FMEA (失效模式與影響分析)**
+   - 識別所有潛在失效模式
+   - 評估嚴重性/發生/檢測 (SOD)
+   - 計算風險優先數 (RPN)
+   - 為高 RPN 項目提議減輕方案
+   - 範本：[SAFETY-ANALYSIS-TEMPLATE.md](../templates/SAFETY-ANALYSIS-TEMPLATE.md)
 
-2. **Unit Verification (ASPICE SWE.4, HWE.4)**
-   - Hardware: UVM testbench, 100% code coverage
-   - Firmware: C unit tests, 100% statement + branch coverage
-   - Template: unit-test-spec.md
-   - Tools: VCS/Questa (HW), pytest/CUnit (FW)
+2. **FTA (故障樹分析)**
+   - 定義頂級不良事件
+   - 建立顯示因果關係的故障樹
+   - 識別最小割集
+   - 計算頂級事件的概率
 
-3. **Integration Verification (ASPICE SWE.5, HWE.5)**
-   - Test component interactions
-   - Verify interfaces work correctly
-   - Template: integration-test-spec.md
+3. **DFA (相關失效分析)**
+   - 識別共同原因失效 (CCF)
+   - 分析連鎖失效情景
+   - 開發相關失效的減輕方案
 
-4. **System Verification (ASPICE SYS.4, SWE.6)**
-   - Test system against all SYS-REQ
-   - Qualification tests verify customer requirements
-   - Template: system-test-spec.md
+4. **可追蹤性：安全性分析 → 需求**
+   - 每個 FMEA 減輕方案 → 實施需求
+   - 範例："雙冗餘檢測器" → TSR-HW-001-001
 
-5. **Coverage Verification**
-   - Automated traceability checking
+**輸出**：
+- fmea.md (帶減輕方案的失效模式)
+- fta.md (故障樹和概率分析)
+- dfa.md (共同原因和連鎖失效)
+
+**審查關卡**：安全性分析審查
+- 檢查清單：
+  - [ ] 所有失效模式已識別
+  - [ ] RPN 計算正確
+  - [ ] 高 RPN 項目有已記錄的減輕方案
+  - [ ] 減輕方案可追蹤到需求
+  - [ ] 共同原因失效已分析
+  - [ ] 剩餘風險對 ASIL 等級可接受
+- 批准：安全經理 + 技術主管
+
+---
+
+### 第 5 階段：實施與驗證 (8-14 天)
+
+**目標**：實施設計並驗證正確性
+
+**活動**：
+
+1. **實施**
+   - 硬體：Verilog/SystemVerilog 中的 RTL 代碼
+   - 韌體：符合 MISRA C:2012 的 C 代碼
+   - 在代碼中維護可追蹤性標籤：`@requirement TSR-HW-001-001`
+
+2. **單元驗證 (ASPICE SWE.4, HWE.4)**
+   - 硬體：UVM 測試平台、100% 代碼涵蓋率
+   - 韌體：C 單元測試、100% 陳述句 + 分支涵蓋率
+   - 範本：unit-test-spec.md
+   - 工具：VCS/Questa (HW)、pytest/CUnit (FW)
+
+3. **整合驗證 (ASPICE SWE.5, HWE.5)**
+   - 測試組件互動
+   - 驗證介面能正常運作
+   - 範本：integration-test-spec.md
+
+4. **系統驗證 (ASPICE SYS.4, SWE.6)**
+   - 針對所有 SYS-REQ 測試系統
+   - 資格認證測試驗證客戶需求
+   - 範本：system-test-spec.md
+
+5. **涵蓋率驗證**
+   - 自動化可追蹤性檢查
    - ```powershell
      .\check-traceability.ps1 -Feature "001-feature-name" -Report
      .\check-requirements-coverage.ps1 -Feature "001-feature-name"
      ```
-   - Target: 100% requirements covered by tests
+   - 目標：100% 的需求由測試涵蓋
 
-**Key Requirement**: Zero test gaps allowed before final review
-- Every SYS-REQ must have test case
-- Every test must trace to requirement
-- Coverage metrics required in PR
+**關鍵要求**：最終審查前不允許測試差距為零
+- 每個 SYS-REQ 都必須有測試用例
+- 每個測試都必須可追蹤到需求
+- PR 中需要涵蓋率指標
 
-**Outputs**:
-- Implementation code (RTL, C)
-- unit-test-spec.md (with results)
-- integration-test-spec.md (with results)
-- system-test-spec.md (with results)
-- Coverage reports
-- Code review records
+**輸出**：
+- 實施代碼 (RTL、C)
+- unit-test-spec.md (帶結果)
+- integration-test-spec.md (帶結果)
+- system-test-spec.md (帶結果)
+- 涵蓋率報告
+- 代碼審查記錄
 
-**Review Gate**: Code Review + Verification Review
-- Code Review Checklist:
-  - [ ] Coding standards followed (MISRA C / SystemVerilog)
-  - [ ] Traceability tags present
-  - [ ] Peer review completed
-  - [ ] Coverage acceptable (100% statement/branch)
-  - [ ] No critical static analysis violations
-- Verification Review Checklist:
-  - [ ] All tests passed
-  - [ ] Coverage metrics acceptable
-  - [ ] No orphan code
-  - [ ] Requirements fully verified
-  - [ ] Defects resolved
-
----
-
-### Phase 6: Review & Approval (2-3 days)
-
-**Goal**: Obtain stakeholder approval before release
-
-**Activities**:
-
-1. **Requirements Review** (if not already approved)
-   - Review changes since initial approval
-   - Verify still complete and consistent
-
-2. **Design Review** (if not already approved)
-   - Review design modifications from safety analysis
-   - Verify design still addresses all requirements
-
-3. **Final Verification Review**
-   - All tests passed ✓
-   - Coverage complete ✓
-   - Traceability complete ✓
-   - Safety analysis addressed ✓
-   - All defects resolved ✓
-
-4. **Sign-off**
-   - Technical Lead approval
-   - Safety Manager approval
-   - Quality Manager approval
-   - Project Manager approval
-
-**Outputs**:
-- Final review records (in review-records/ directory)
-- Approval sign-offs documented
-- All open issues resolved
+**審查關卡**：代碼審查 + 驗證審查
+- 代碼審查檢查清單：
+  - [ ] 遵循編碼標準 (MISRA C / SystemVerilog)
+  - [ ] 可追蹤性標籤已存在
+  - [ ] 同儕審查已完成
+  - [ ] 涵蓋率可接受 (100% 陳述句/分支)
+  - [ ] 無關鍵靜態分析違規
+- 驗證審查檢查清單：
+  - [ ] 所有測試通過
+  - [ ] 涵蓋率指標可接受
+  - [ ] 無孤立代碼
+  - [ ] 需求已完整驗證
+  - [ ] 缺陷已解決
 
 ---
 
-### Phase 7: Baseline & Release (1 day)
+### 第 6 階段：審查與批准 (2-3 天)
 
-**Goal**: Create immutable baseline and prepare for deployment
+**目標**：在發佈前獲得利害關係人批准
 
-**Activities**:
+**活動**：
 
-1. **Version All Artifacts**
-   - Freeze all documentation
-   - Tag code in Git: `feature/001-v1.0`
-   - Update change-log.md with final version
+1. **需求審查** (如果尚未批准)
+   - 審查自初始批准以來的更改
+   - 驗證仍然完整且一致
 
-2. **Create Baseline**
+2. **設計審查** (如果尚未批准)
+   - 審查來自安全性分析的設計修改
+   - 驗證設計仍然解決所有需求
+
+3. **最終驗證審查**
+   - 所有測試通過 ✓
+   - 涵蓋率完整 ✓
+   - 可追蹤性完整 ✓
+   - 安全性分析已解決 ✓
+   - 所有缺陷已解決 ✓
+
+4. **簽署**
+   - 技術主管批准
+   - 安全經理批准
+   - 品質經理批准
+   - 專案經理批准
+
+**輸出**：
+- 最終審查記錄 (在 review-records/ 目錄中)
+- 已記錄的批准簽署
+- 所有未解決問題已解決
+
+---
+
+### 第 7 階段：基線與發佈 (1 天)
+
+**目標**：建立不可變的基線並準備部署
+
+**活動**：
+
+1. **版本化所有成品**
+   - 凍結所有文檔
+   - 在 Git 中標記代碼：`feature/001-v1.0`
+   - 使用最終版本更新 change-log.md
+
+2. **建立基線**
    ```bash
    git tag -a "001-power-loss-protection-v1.0" -m "Feature 001 release"
    ```
 
-3. **Archive for Product Lifecycle**
-   - Store in controlled repository
-   - Link to product version/build
-   - Record for future safety audits
+3. **歸檔用於產品生命週期**
+   - 存儲在受控存儲庫
+   - 連結到產品版本/組建
+   - 記錄用於未來安全稽核
 
-4. **Prepare Release Documentation**
-   - Summary of changes
-   - Traceability matrix (final)
-   - Safety analysis (final)
-   - Test results (final)
+4. **準備發佈文檔**
+   - 更改摘要
+   - 可追蹤性矩陣 (最終版)
+   - 安全性分析 (最終版)
+   - 測試結果 (最終版)
 
-**Outputs**:
-- Baselined feature directory
-- Git tag for release
-- Release documentation package
-- Product configuration record
+**輸出**：
+- 基線特性目錄
+- Git 標籤用於發佈
+- 發佈文檔套件
+- 產品配置記錄
 
 ---
 
-## Configuration Management Integration
+## 配置管理整合
 
-### Git Workflow
+### Git 工作流程
 
-**Branch Naming**:
+**分支命名**：
 ```
 feature/[ID]-[short-name]
-  Example: feature/001-power-loss-protection
+  範例：feature/001-power-loss-protection
 ```
 
-**Commit Messages** (include requirement/test ID):
+**提交訊息** (包含需求/測試 ID)：
 ```
-commit: TSR-HW-001-001 - Implement power detector circuit
+commit: TSR-HW-001-001 - 實施電源檢測器電路
 
-- Detect supply voltage drop < 1ms
-- Propagation delay: 850ns (< 1ms requirement)
-- Redundant comparator for fault tolerance
+- 檢測供應電壓下降 < 1ms
+- 傳播延遲：850ns (< 1ms 需求)
+- 用於容錯的冗餘比較器
 
-References: TSR-HW-001-001, TC-HW-001-001
+引用：TSR-HW-001-001、TC-HW-001-001
 ```
 
-**Pre-commit Hooks**:
-- Verify traceability tags present in code
-- Check traceability matrix updated
-- Validate commit message format
+**預提交鉤子**：
+- 驗證代碼中存在可追蹤性標籤
+- 檢查可追蹤性矩陣已更新
+- 驗證提交訊息格式
 
-**Pull Request Checks**:
-- Automated traceability verification
-- Coverage metric validation
-- Design documentation review
+**拉取請求檢查**：
+- 自動化可追蹤性驗證
+- 涵蓋率指標驗證
+- 設計文檔審查
 
 ---
 
-## Quality Gates & Approval Criteria
+## 品質關卡與批准標準
 
-| Gate | Criteria | Owner | Evidence |
-|------|----------|-------|----------|
-| **Initialization** | Scope approved, ASIL assigned | Tech Lead | Feature kickoff meeting notes |
-| **Requirements** | 100% traced, stakeholder approved | Req Lead + Safety Mgr | Signed requirements review |
-| **Design** | Covers all requirements, DFT planned | Arch + Tech Lead | Signed design review |
-| **Safety** | FMEA/FTA complete, residual risk acceptable | Safety Mgr | Signed safety analysis review |
-| **Implementation** | Code reviewed, 100% coverage, zero crit violations | Tech Lead + Peer | Signed code review |
-| **Verification** | All tests pass, traceability complete | Test Lead + QA | Signed verification review |
-| **Release** | All approvals obtained, baselined | PM + Safety Mgr | Feature tagged in Git |
+| 關卡 | 標準 | 擁有者 | 證據 |
+|------|------|--------|------|
+| **初始化** | 範圍批准、ASIL 已分配 | 技術主管 | 特性啟動會議紀錄 |
+| **需求** | 100% 可追蹤、利害關係人批准 | 需求主管 + 安全經理 | 簽署的需求審查 |
+| **設計** | 涵蓋所有需求、DFT 已計劃 | 架構師 + 技術主管 | 簽署的設計審查 |
+| **安全** | FMEA/FTA 完成、剩餘風險可接受 | 安全經理 | 簽署的安全性分析審查 |
+| **實施** | 代碼已審查、100% 涵蓋率、零嚴重違規 | 技術主管 + 同儕 | 簽署的代碼審查 |
+| **驗證** | 所有測試通過、可追蹤性完整 | 測試主管 + QA | 簽署的驗證審查 |
+| **發佈** | 所有批准已獲得、已基線化 | PM + 安全經理 | Git 中標記的特性 |
 
 ---
 
-## Change Management During Development
+## 開發期間的變更管理
 
-### When Requirements Change
+### 當需求變更時
 
-1. **Impact Analysis**
+1. **影響分析**
    ```powershell
    .\check-change-impact.ps1 -File "requirements.md" -ChangeType "requirement"
    ```
 
-2. **Update Affected Artifacts**
-   - Design documents affected
-   - Implementation files affected
-   - Test cases affected
+2. **更新受影響的成品**
+   - 受影響的設計文檔
+   - 受影響的實施檔案
+   - 受影響的測試用例
 
-3. **Obtain Re-approval**
-   - Requirements review (if significant change)
-   - Design review (if design impact)
-   - Verification review (if test impact)
+3. **獲得重新批准**
+   - 需求審查 (如果發生重大變更)
+   - 設計審查 (如果有設計影響)
+   - 驗證審查 (如果有測試影響)
 
-4. **Update Change Log**
-   - Document change with justification
-   - Cross-reference impacted requirements
-   - Record approvals
+4. **更新變更日誌**
+   - 記錄更改及其理由
+   - 交叉引用受影響的需求
+   - 記錄批准
 
-### When Design Changes
+### 當設計變更時
 
-1. **Verify Requirements Still Satisfied**
-   - Review against SYS-REQ/TSR
-   - Update traceability matrix
+1. **驗證需求仍然得到滿足**
+   - 根據 SYS-REQ/TSR 進行審查
+   - 更新可追蹤性矩陣
 
-2. **Update Implementation Plan**
-   - Estimate cost/schedule impact
-   - Identify blocked work items
+2. **更新實施計劃**
+   - 估計成本/進度影響
+   - 識別被阻止的工作項
 
-3. **Re-execute Affected Tests**
-   - Unit tests for changed modules
-   - Integration tests for interfaces
-   - Regression test suite
+3. **重新執行受影響的測試**
+   - 已變更模組的單元測試
+   - 介面的整合測試
+   - 迴歸測試套件
 
-### When Implementation Changes
+### 當實施變更時
 
-1. **Verify Design Specification Accuracy**
-   - Code matches design documentation
+1. **驗證設計規格準確性**
+   - 代碼符合設計文檔
 
-2. **Update Code Traceability**
-   - Add/update @requirement tags
-   - Ensure full traceability
+2. **更新代碼可追蹤性**
+   - 新增/更新 @requirement 標籤
+   - 確保完整可追蹤性
 
-3. **Re-execute Verification**
-   - Unit tests for changed functions
-   - Coverage re-measurement
-   - Regression testing
-
----
-
-## Metrics and Reporting
-
-### Key Metrics
-
-**Requirements Metrics**:
-- Total requirements: [count]
-- Requirements by ASIL: [A/B/C/D breakdown]
-- Requirements by type: [Functional/Performance/Interface]
-- Requirement volatility: [% changed]
-
-**Traceability Metrics**:
-- Forward coverage: [% requirements with design/code/test]
-- Backward coverage: [% code traced to requirements]
-- Coverage gaps: [list of untraced items]
-- Orphan items: [code/tests without requirements]
-
-**Verification Metrics**:
-- Statement coverage: [100% target]
-- Branch coverage: [100% target for ASIL-B]
-- Functional coverage: [% of scenarios tested]
-- Defect density: [defects per KLOC]
-
-**Schedule Metrics**:
-- Planned vs. actual phase duration
-- Milestone achievement rate
-- Rework percentage
-
-### Reporting
-
-**Daily Standup** (brief):
-- What got done
-- What's blocked
-- Next actions
-
-**Weekly Status Report**:
-- Phase progress
-- Issues and risks
-- Upcoming milestones
-
-**Phase Gate Report**:
-- Gate pass/fail criteria
-- Evidence of compliance
-- Approvals/sign-offs
+3. **重新執行驗證**
+   - 已變更函式的單元測試
+   - 涵蓋率重新測量
+   - 迴歸測試
 
 ---
 
-## Best Practices
+## 指標與報告
 
-✅ **DO**:
+### 關鍵指標
 
-1. **Start with requirements** - Never design without requirements review
-2. **Involve safety early** - Safety Manager participates from Phase 1
-3. **Automate traceability** - Use scripts to detect gaps
-4. **Document decisions** - Capture "why" not just "what"
-5. **Test early** - Write tests before implementation
-6. **Review continuously** - Don't wait for end-of-phase reviews
-7. **Version everything** - All artifacts in Git
-8. **Maintain baselines** - Baseline at each phase gate
+**需求指標**：
+- 總需求數：[計數]
+- 按 ASIL 的需求：[A/B/C/D 細分]
+- 按類型的需求：[功能/性能/介面]
+- 需求波動性：[% 已變更]
 
-❌ **DON'T**:
+**可追蹤性指標**：
+- 正向涵蓋率：[% 具有設計/代碼/測試的需求]
+- 反向涵蓋率：[% 可追蹤到需求的代碼]
+- 涵蓋率差距：[無追蹤項目清單]
+- 孤立項目：[無需求的代碼/測試]
 
-1. Don't skip requirements review
-2. Don't have code without traceability tags
-3. Don't waive coverage goals
-4. Don't skip safety analysis (FMEA/FTA/DFA)
-5. Don't change requirements without impact analysis
-6. Don't merge code that fails verification
-7. Don't release without final review
-8. Don't ignore metrics
+**驗證指標**：
+- 陳述句涵蓋率：[100% 目標]
+- 分支涵蓋率：[ASIL-B 的 100% 目標]
+- 功能涵蓋率：[% 測試的情景]
+- 缺陷密度：[每 KLOC 的缺陷]
 
----
+**進度指標**：
+- 計畫與實際階段時間
+- 里程碑達成率
+- 返工百分比
 
-## Troubleshooting
+### 報告
 
-| Issue | Cause | Solution |
-|-------|-------|----------|
-| Traceability gaps found | Requirements not flowed to TSR | Complete TSR allocation process |
-| Code without traceability | Developer forgot @requirement tags | Add tags, update traceability matrix |
-| Test coverage < 100% | Unreachable code or missing tests | Justify unreachable code or add tests |
-| High FMEA RPN | Insufficient design mitigations | Redesign or add redundancy/monitoring |
-| Changed requirements | Scope creep | Formal change control process |
+**每日站立會議** (簡短)：
+- 完成了什麼
+- 什麼被阻止
+- 後續行動
 
----
+**週狀態報告**：
+- 階段進度
+- 問題和風險
+- 即將推進的里程碑
 
-## Tools and Environment
-
-**Git**: Version control and branching
-**Markdown**: Requirements and design documentation
-**PowerShell**: Traceability automation scripts
-**Coverage tools**: VCS (HW), pytest/gcov (FW)
-**Static analysis**: Lint tools (Verilog), clang-analyzer (C)
+**階段關卡報告**：
+- 關卡通過/失敗標準
+- 符合的證據
+- 批准/簽署
 
 ---
 
-## Next Steps
+## 最佳實踐
 
-1. **Read**: [Feature Creation Guide](FEATURE-CREATION-GUIDE.md)
-2. **Execute**: `.\create-feature.ps1` to create your first feature
-3. **Follow**: 7-phase process outlined above
-4. **Validate**: Run traceability scripts to check completeness
-5. **Review**: Conduct gate reviews before proceeding
+✅ **應該做**：
 
-**Questions?** Contact: Process Owner, Technical Lead, or Safety Manager
+1. **從需求開始** - 未經需求審查，切勿進行設計
+2. **及早涉及安全** - 安全經理從第 1 階段起參與
+3. **自動化可追蹤性** - 使用指令碼檢測差距
+4. **記錄決策** - 捕捉"為什麼"而不僅僅是"什麼"
+5. **及早測試** - 在實施前編寫測試
+6. **持續審查** - 不要等到階段末期審查
+7. **版本化所有內容** - 所有成品在 Git 中
+8. **維護基線** - 在每個階段關卡進行基線化
+
+❌ **不應該做**：
+
+1. 不要跳過需求審查
+2. 不要使用沒有可追蹤性標籤的代碼
+3. 不要放棄涵蓋率目標
+4. 不要跳過安全性分析 (FMEA/FTA/DFA)
+5. 不要在未進行影響分析的情況下變更需求
+6. 不要合併失敗驗證的代碼
+7. 不要在未進行最終審查的情況下發佈
+8. 不要忽視指標
 
 ---
 
-**Document Version**: 1.0.0  
-**Last Updated**: 2025-12-02  
-**Next Review**: 2026-03-02
+## 故障排除
+
+| 問題 | 原因 | 解決方案 |
+|------|------|--------|
+| 發現可追蹤性差距 | 需求未流向 TSR | 完成 TSR 配置流程 |
+| 代碼沒有可追蹤性 | 開發人員忘記 @requirement 標籤 | 新增標籤、更新可追蹤性矩陣 |
+| 測試涵蓋率 < 100% | 無法到達的代碼或缺少測試 | 正當化無法到達的代碼或新增測試 |
+| 高 FMEA RPN | 設計減輕方案不足 | 重新設計或新增冗餘/監控 |
+| 需求已變更 | 範圍蠕變 | 正式變更控制流程 |
+
+---
+
+## 工具和環境
+
+**Git**：版本控制和分支
+**Markdown**：需求和設計文檔
+**PowerShell**：可追蹤性自動化指令碼
+**涵蓋率工具**：VCS (HW)、pytest/gcov (FW)
+**靜態分析**：Lint 工具 (Verilog)、clang-analyzer (C)
+
+---
+
+## 後續步驟
+
+1. **閱讀**：[特性建立指南](FEATURE-CREATION-GUIDE.md)
+2. **執行**：`.\create-feature.ps1` 以建立您的第一個特性
+3. **遵循**：上述 7 階段流程
+4. **驗證**：執行可追蹤性指令碼以檢查完整性
+5. **審查**：在繼續前進行關卡審查
+
+**有問題嗎？** 聯絡：流程所有者、技術主管或安全經理
+
+---
+
+**文檔版本**：1.0.0  
+**最後更新**：2025-12-02  
+**下次審查**：2026-03-02

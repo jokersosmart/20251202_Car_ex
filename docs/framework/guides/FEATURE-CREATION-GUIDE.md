@@ -1,845 +1,814 @@
-# Feature Creation Guide
+# 特性建立指南
 
-**Purpose**: Step-by-step instructions for creating a new feature following ISO 26262 + ASPICE framework  
-**Audience**: System Architects, Requirements Engineers, Hardware/Software Leads  
-**Version**: 1.0.0
+**目的**：遵循 ISO 26262 + ASPICE 框架建立新特性的逐步說明  
+**對象**：系統架構師、需求工程師、硬體/軟體主管  
+**版本**：1.0.0
 
 ---
 
-## Quick Start (5 minutes)
+## 快速開始 (5 分鐘)
 
 ```powershell
-# 1. Create a new feature directory
+# 1. 建立新的特性目錄
 PS> cd .specify/scripts
-PS> .\create-feature.ps1 -Name "Power Loss Protection" -ASIL "B" -Type "System"
+PS> .\create-feature.ps1 -Name "電源喪失保護" -ASIL "B" -Type "System"
 
-# Output:
-# Feature created: 001-power-loss-protection
-# ✓ Directory structure created
-# ✓ All templates populated
-# ✓ Feature ID: 001
-# ✓ Traceability matrix initialized
+# 輸出：
+# 特性已建立：001-power-loss-protection
+# ✓ 已建立目錄結構
+# ✓ 所有範本已填充
+# ✓ 特性 ID：001
+# ✓ 可追蹤性矩陣已初始化
 ```
 
-**Next Step**: Read "Detailed Walkthrough" section below for complete instructions.
+**下一步**：閱讀下面的"詳細逐步介紹"部分，了解完整說明。
 
 ---
 
-## Detailed Walkthrough
+## 詳細逐步介紹
 
-### Phase 1: Feature Initialization (Day 1)
+### 第 1 階段：特性初始化 (第 1 天)
 
-#### Step 1: Identify Feature Scope
+#### 步驟 1：識別特性範圍
 
-Answer these questions:
+回答這些問題：
 
-**What safety hazard does this feature address?**
-- Example: "Power loss during write operation could cause data corruption"
+**此特性要解決什麼安全危害？**
+- 範例："寫入操作期間的電源喪失可能導致資料損壞"
 
-**What is the ASIL level?** (A=lowest, D=highest)
-- Use HARA (Hazard Analysis and Risk Assessment) output
-- SSD control features typically ASIL-B/C
-- Safety-critical features (data integrity) → ASIL-B minimum
+**ASIL 等級是什麼？** (A=最低，D=最高)
+- 使用 HARA (危害分析和風險評估) 輸出
+- SSD 控制特性通常為 ASIL-B/C
+- 安全關鍵特性 (資料完整性) → 最少 ASIL-B
 
-**What component does this belong to?**
-- System: Multi-component interaction
-- Hardware: Circuit, sensor, controller element
-- Firmware: Algorithm, data structure, state machine
+**此特性屬於什麼組件？**
+- 系統：多組件互動
+- 硬體：電路、感測器、控制器元件
+- 韌體：演算法、資料結構、狀態機
 
-**Who are the stakeholders?**
-- Technical lead, safety manager, test engineer, customer rep
+**誰是利害關係人？**
+- 技術主管、安全經理、測試工程師、客戶代表
 
-#### Step 2: Generate Feature Structure
+#### 步驟 2：生成特性結構
 
-**Using the script** (recommended):
+**使用指令碼** (建議)：
 
 ```powershell
 .\create-feature.ps1 `
-  -Name "Power Loss Protection" `
+  -Name "電源喪失保護" `
   -ASIL "B" `
   -Type "System" `
   -Owner "John Smith" `
   -Stakeholders "Jane Lead, Bob Safety, Alice Test"
 ```
 
-**Manual approach** (if script unavailable):
+**手動方法** (如果指令碼不可用)：
 
-1. Create directory: `specs/001-power-loss-protection/`
-2. Copy templates from `docs/framework/templates/` into feature directory
-3. Create subdirectories: `review-records/`
-4. Initialize all template files with feature metadata
+1. 建立目錄：`specs/001-power-loss-protection/`
+2. 從 `docs/framework/templates/` 將範本複製到特性目錄
+3. 建立子目錄：`review-records/`
+4. 使用特性元資料初始化所有範本檔案
 
-#### Step 3: Create Feature Overview
+#### 步驟 3：建立特性概述
 
-Edit `specs/001-power-loss-protection/spec.md`:
+編輯 `specs/001-power-loss-protection/spec.md`：
 
 ```markdown
-# Feature 001: Power Loss Protection
+# 特性 001：電源喪失保護
 
-**ASIL**: B  
-**Type**: System (Hardware + Firmware)  
-**Owner**: John Smith  
-**Created**: 2025-12-16  
-**Status**: Planning
+**ASIL**：B  
+**類型**：系統 (硬體 + 韌體)  
+**所有者**：John Smith  
+**建立日期**：2025-12-16  
+**狀態**：計畫中
 
-## Executive Summary
+## 執行摘要
 
-The system must detect power loss during NAND write operations and safely 
-abort the write to prevent data corruption. Upon detection, firmware must 
-checkpoint current state and notify host of operation failure.
+系統必須在 NAND 寫入操作期間檢測電源喪失，並安全地中止寫入以防止資料損壞。檢測後，韌體必須檢查點目前狀態並通知主機操作失敗。
 
-## Hazard Reference
+## 危害參考
 
-From HARA analysis:
-- **Hazard H-3.2**: Power loss during flash write → corrupted data block
-- **Severity**: S3 (possible data loss)
-- **Exposure**: E3 (driving conditions)
-- **Controllability**: C2 (driver can mitigate by powering off cleanly)
-- **ASIL**: B (per ISO 26262-3:2018)
+來自 HARA 分析：
+- **危害 H-3.2**：閃存寫入期間的電源喪失 → 損壞的資料塊
+- **嚴重性**：S3 (可能遺失資料)
+- **曝光度**：E3 (駕駛條件)
+- **可控性**：C2 (駕駛員可以透過乾淨關機來減輕)
+- **ASIL**：B (根據 ISO 26262-3:2018)
 
-## Business Driver
+## 業務驅動因素
 
-- Improve SSD reliability: Zero unplanned data loss
-- Reduce customer support: Avoid warranty claims
-- Competitive advantage: Exceeds industry reliability standards
-```
+- 支援 PCIe 規格 (草案版本 5.1)
+- 對抗客戶投訴 (有 3 個已報告的資料損壞事件)
+- 符合 ISO 26262 功能安全要求
 
 ---
 
-### Phase 2: Requirements Analysis (Days 2-5)
+### 第 2 階段：需求分析 (第 2-3 天)
 
-#### Step 1: Establish Safety Goals
+#### 步驟 4：建立安全目標 (SG)
 
-Edit `specs/001-power-loss-protection/requirements.md`:
-
-```markdown
-## Safety Goals
-
-### SG-001-01: Prevent Data Corruption on Power Loss
-
-**Description**: The system shall detect loss of main power supply during 
-active NAND write operations and safely terminate the operation to prevent 
-data corruption.
-
-**Hazard Reference**: H-3.2 (Power loss during write)
-
-**ASIL**: B
-
-**Acceptance Criteria**:
-- All data corruption scenarios from HARA addressed by this goal
-- Functional Safety Requirements below implement this goal
-- System qualification tests verify goal achievement
-```
-
-#### Step 2: Define Functional Safety Requirements
-
-Continue in `requirements.md`:
+從危害開始並定義安全目標：
 
 ```markdown
-## Functional Safety Requirements (FSR)
+# SG-001-01：防止寫入期間的資料損壞
 
-### FSR-001-01: Power Loss Detection
+**ASIL**：B  
+**衍生自**：危害 H-3.2  
+**目標**：系統必須檢測電源喪失並中止寫入操作
 
-**Description**: System shall detect loss of main power supply within 1 millisecond
+**可測量的成功標準**：
+- 100% 的寫入操作要麼成功要麼被中止(不能損壞)
+- 檢測延遲 < 1ms
+- 無虛假失效檢測 (PPM < 10)
 
-**Type**: Detection
-
-**ASIL**: B (inherited from SG-001-01)
-
-**Rationale**: Fast detection enables safe write termination before data corruption occurs
-
-**Acceptance Criteria**:
-- Detection latency measured < 1 millisecond
-- Detection method operates during all SSD power states
-- False positive rate < 1 per million operations
-
-### FSR-001-02: Safe Write Termination
-
-**Description**: Upon power loss detection, system shall immediately terminate 
-active write operations and preserve system state for recovery.
-
-**Type**: Mitigation
-
-**ASIL**: B
-
-**Rationale**: Prevents partial writes that cause data corruption
-
-**Acceptance Criteria**:
-- Active NAND write command aborted within 500 microseconds
-- In-flight data flushed or discarded (not partially committed)
-- System state checkpointed to allow recovery after power restoration
-
-### FSR-001-03: Host Notification
-
-**Description**: Upon power loss recovery, system shall notify host of failed operations
-
-**Type**: Recovery
-
-**ASIL**: B
-
-**Rationale**: Allows host to retry operations or notify user of power event
-
-**Acceptance Criteria**:
-- Power loss event logged with timestamp
-- Host receives command completion status (error) for failed operations
+**生命週期**：
+- 狀態：已認可
+- 簽署者：安全經理
+- 日期：2025-12-16
 ```
 
-#### Step 3: Derive System Requirements
+#### 步驟 5：衍生功能安全需求 (FSR)
 
-Continue in `requirements.md`:
+對於每個 SG，建立一個或多個 FSR：
 
 ```markdown
-## System Requirements (SYS-REQ)
+# FSR-001-01：檢測電源喪失
 
-### SYS-REQ-001-001: Power Supply Monitoring
+**ASIL**：B (繼承自 SG-001-01)  
+**衍生自**：SG-001-01  
+**類型**：檢測  
+**優先級**：高
 
-**Derives From**: FSR-001-01
+**要求**：系統必須在電源下降到操作臨界值以下 1ms 內檢測。
 
-**Description**: System shall continuously monitor main power supply voltage 
-and detect when it falls below operational threshold (3.0V for 3.3V supply).
+**功能描述**：
+1. 硬體檢測電源軌下降
+2. 向韌體發出中斷信號
+3. 韌體停止任何正在進行的寫入操作
+4. 向主機報告失敗狀態
 
-**ASIL**: B
+**驗收標準**：
+- [ ] 檢測延遲 < 1ms
+- [ ] 檢測精度 ± 100mV
+- [ ] 恢復時間 < 100ns
+- [ ] FMEA 風險優先數 < 150
 
-**Functional Scope**: 
-- Monitors 3.3V main power rail
-- Excludes backup/standby power monitoring
-- Active during all SSD operational modes
+**驗證方法**：
+- 測試 (實驗室功率掃描)
+- 分析 (時序驗證)
+- 檢查 (代碼審查)
 
-**Timing**: Detection latency < 1ms
-
-**Acceptance Criteria**:
-- Threshold crossing detection verified in SYS test
-- Latency measurement from voltage drop to interrupt signal < 1ms
-- Works across process/temperature/voltage corners per silicon specs
-
-### SYS-REQ-001-002: Write Command Abort
-
-**Derives From**: FSR-001-02
-
-**Description**: Upon power loss detection, all active NAND write commands 
-shall be terminated and in-flight data discarded.
-
-**ASIL**: B
-
-**Acceptance Criteria**:
-- NAND write command aborted within 500 microseconds of detection signal
-- NAND data buffer cleared to prevent partial writes
-- Microcontroller halts further write operations
-
-### SYS-REQ-001-003: State Checkpointing
-
-**Derives From**: FSR-001-02
-
-**Description**: Critical system state shall be checkpointed to enable recovery 
-after power loss.
-
-**ASIL**: B
-
-**Acceptance Criteria**:
-- Critical state: current wear-leveling map, block management state, command queue
-- Checkpointing completes within 5ms after write abort
-- Checkpoint verified with CRC during next power-on
-```
-
-#### Step 4: Allocate to Technical Requirements
-
-Continue in `requirements.md`:
-
-```markdown
-## Technical Safety Requirements - Hardware (TSR-HW)
-
-### TSR-HW-001-001: Power Detector Circuit
-
-**Derives From**: SYS-REQ-001-001
-
-**Component**: Power Monitor
-
-**Description**: Dedicated analog/digital circuit shall monitor 3.3V supply 
-voltage and generate interrupt signal when voltage falls below 3.0V.
-
-**Timing**: Voltage-to-interrupt latency < 1 millisecond
-
-**Design Constraints**:
-- Area: < 0.5 mm²
-- Power: < 1 mW in operation
-- Temperature range: -40°C to +85°C
-
-**Safety Mechanisms**:
-- Redundant voltage threshold comparison (hysteresis)
-- Independent signal path to microcontroller
-- Built-in self-test (BIST) for circuit verification
-
-**RTL Files**: `rtl/power_monitor.v`
-
-**Test Cases**: `TC-HW-001-001`, `TC-HW-001-002`
-
-## Technical Safety Requirements - Software (TSR-SW)
-
-### TSR-SW-001-001: Power Loss Interrupt Handler
-
-**Derives From**: SYS-REQ-001-002
-
-**Module**: Firmware Power Manager
-
-**Description**: Interrupt service routine shall abort active NAND write 
-and execute safe shutdown sequence.
-
-**Timing**: Handler execution time < 500 microseconds
-
-**Algorithm**:
-1. Save current command pointer to backup RAM
-2. Send abort command to NAND controller
-3. Clear data buffers
-4. Set power-loss flag
-5. Enter ultra-low-power mode
-
-**MISRA C:2012 Compliance**: Section 8.2 (automotive coding standard)
-
-**Code Files**: `firmware/power_manager.c`
-
-**Test Cases**: `TC-SW-001-001`, `TC-SW-001-002`
-```
-
-#### Step 5: Requirements Review
-
-Create `review-records/requirements-review.md`:
-
-```markdown
-# Requirements Review Meeting
-
-**Date**: 2025-12-18  
-**Attendees**: John Smith (Owner), Jane Lead (Technical Lead), Bob Safety (Safety Manager)  
-**Duration**: 1.5 hours
-
-## Review Checklist
-
-- [x] All requirements are clear and unambiguous
-- [x] All requirements are verifiable and testable
-- [x] All requirements trace to parent (FSR/SYS-REQ)
-- [x] All requirements have acceptance criteria
-- [x] ASIL levels correctly inherited
-- [x] Safety goals address all hazards from HARA
-- [x] No contradictions between requirements
-- [x] Required documentation referenced
-- [x] Schedule and resource estimates reasonable
-
-## Issues Raised
-
-**Issue 1**: Detection latency not specified for all voltage conditions  
-**Resolution**: Added corner cases: process (TT/FF/SS), temperature (-40/+25/+85), voltage (3.0-3.6V)  
-**Owner**: John Smith  
-**Due**: 2025-12-19  
-
-**Issue 2**: Recovery mechanism after power restoration unclear  
-**Resolution**: Added FSR-001-03 for host notification  
-**Owner**: John Smith  
-**Due**: 2025-12-19  
-
-## Sign-off
-
-✓ **Approved** by Jane Lead (Technical Lead) - Date: 2025-12-18  
-✓ **Approved** by Bob Safety (Safety Manager) - Date: 2025-12-18  
-
-**Status**: SYS-REQ finalized and baselined
-```
+**生命週期**：
+- 狀態：已審查
+- 簽署者：技術主管
+- 日期：2025-12-16
 
 ---
 
-### Phase 3: Architecture and Detailed Design (Days 6-10)
+# FSR-001-02：安全中止寫入
 
-#### Step 1: System Architecture
+**ASIL**：B (繼承自 SG-001-01)  
+**衍生自**：SG-001-01  
+**類型**：減輕  
+**優先級**：高
 
-Create `specs/001-power-loss-protection/architecture.md`:
+**要求**：檢測到電源喪失後，韌體必須立即停止任何正在進行的寫入操作。
+
+**功能描述**：
+1. 接收來自硬體檢測器的中斷
+2. 清除 NAND 命令隊列
+3. 停用寫入時鐘
+4. 保存恢復狀態
+
+**驗收標準**：
+- [ ] 中止延遲 < 10µs
+- [ ] 未傳輸的資料已放棄
+- [ ] 狀態標誌已設定供恢復使用
+
+**驗證方法**：
+- 測試 (中止延遲測量)
+- 分析 (代碼路徑分析)
+
+**生命週期**：
+- 狀態：已審查
+- 簽署者：軟體主管
+- 日期：2025-12-16
+```
+
+#### 步驟 6：開發系統需求 (SYS-REQ)
+
+分解每個 FSR 為系統需求：
 
 ```markdown
-# System Architecture
+# SYS-REQ-001-01：電源檢測電路
 
-## Block Diagram
+**ASIL**：B (繼承自 FSR-001-01)  
+**衍生自**：FSR-001-01  
+**組件**：電源監視器 (硬體)  
+**優先級**：高
 
+**要求**：
+
+在供應電壓跌至 2.8V 以下時，硬體必須立即 (< 1ms) 將電源喪失信號驅動至低電平，以觸發韌體中斷。
+
+**詳細設計限制**：
+- 檢測閾值：2.8V ± 100mV
+- 輸出跳變時間：< 100ns
+- 誤差率：PPM < 10 (百萬分之)
+
+**驗收標準**：
+- [ ] 檢測延遲測量 < 1ms (溫度、電壓角超過)
+- [ ] 輸出在 < 100ns 內改變
+- [ ] 無抖動 (閾值 ± 50mV 範圍外無中斷)
+
+**驗證方法**：
+- 測試 (功率掃描、溫度掃描、噪聲注入)
+- 分析 (電路時序模擬)
+
+**設計參考**：
+- 電源監視器 IC：[型號 XYZ123]
+- 參考設計：`docs/hardware/power-monitor-ref-design.md`
+
+**生命週期**：
+- 狀態：已審查
+- 簽署者：硬體主管
+- 日期：2025-12-16
+
+---
+
+# SYS-REQ-001-02：寫入中止邏輯
+
+**ASIL**：B (繼承自 FSR-001-02)  
+**衍生自**：FSR-001-02  
+**組件**：韌體寫入控制器  
+**優先級**：高
+
+**要求**：
+
+從硬體接收電源喪失中斷時，韌體必須在 < 10µs 內完全停止任何正在進行的 NAND 寫入操作。
+
+**詳細規格**：
+- 中止延遲：< 10µs (從中斷線上升邊緣測量)
+- NAND 命令隊列：已清除
+- 寫入時鐘：已停用
+- 狀態暫存器：已設定 "power-loss-detected" 位
+
+**驗收標準**：
+- [ ] 檢測中斷並設定中止標記 < 2µs
+- [ ] 命令隊列已清除 < 5µs
+- [ ] 寫入時鐘停用 < 1µs
+- [ ] 總中止時間 < 10µs
+
+**驗證方法**：
+- 測試 (中止延遲測量、邏輯分析儀)
+- 分析 (代碼路徑時序分析)
+- 檢查 (代碼審查 - 無 sleep/loop 在關鍵路徑上)
+
+**實施參考**：
+- 中斷處理程式：`src/firmware/power-loss-interrupt.c`
+- 寫入控制器：`src/firmware/nand-write-controller.c`
+
+**生命週期**：
+- 狀態：已審查
+- 簽署者：韌體主管
+- 日期：2025-12-16
 ```
-Main Power (3.3V)
-  ├─→ Power Monitor Circuit (analog comparator)
-  │     └─→ Interrupt Signal
-  │           └─→ Microcontroller NVIC (Normal Vector Interrupt Controller)
-  │                 └─→ Power Loss Interrupt Handler (firmware)
-  │                       ├─→ NAND Controller (abort command)
-  │                       └─→ Checkpoint to backup RAM
 
-Secondary Power (Standby)
-  └─→ Backup Power Supply (capacitor bank)
-        └─→ Ultra-low-power mode (preserve state)
-```
+#### 步驟 7：配置技術安全需求 (TSR)
 
-## Interface Specification
-
-**Power Monitor → Microcontroller**:
-- Signal: `pwr_loss_n` (active low interrupt)
-- Timing: < 1ms propagation
-- Voltage levels: 3.3V CMOS
-
-**Microcontroller → NAND Controller**:
-- Command: Write Abort
-- Timing: < 500µs
-- Protocol: Existing NVMe protocol
-
-## Component Allocation
-
-| Requirement | Hardware Component | Software Module |
-|---|---|---|
-| SYS-REQ-001-001 | Power Monitor (TSR-HW-001-001) | - |
-| SYS-REQ-001-002 | NAND Controller | Interrupt Handler (TSR-SW-001-001) |
-| SYS-REQ-001-003 | Backup RAM | Checkpoint Manager (TSR-SW-001-002) |
-```
-
-#### Step 2: Detailed Design
-
-Create `specs/001-power-loss-protection/detailed-design.md`:
+為每個 SYS-REQ 分配硬體或軟體 TSR：
 
 ```markdown
-# Detailed Design
+# TSR-HW-001-01：電源監視器電路
 
-## Power Monitor Circuit (Hardware)
+**ASIL**：B  
+**衍生自**：SYS-REQ-001-01  
+**類型**：硬體模組  
+**責任**：設計和驗證電源監視器電路
 
-**Design Overview**:
-- Precision analog comparator monitors 3.3V rail
-- Threshold: 3.0V ± 2% with hysteresis
-- Output: 5ns propagation delay (typ)
-- Ultra-low quiescent current: 50µA
+**關鍵職責**：
+1. 實施電源檢測邏輯
+2. 達成 < 1ms 檢測延遲
+3. 達成 PPM < 10 誤差率
 
-**Schematic**: `rtl/power_monitor.v` lines 1-45
+**設計考慮**：
+- 溫度補償
+- 電源雜訊濾波
+- 冷啟動行為
+- 故障模式冗餘度
 
-**Timing Analysis**:
-- Voltage drop rate: 5V/ms (worst case)
-- Detection threshold crossing: 0.2ms
-- Comparator propagation: 20ns
-- Signal routing: <500ns
-- **Total**: <1ms ✓
+**驗證職責**：
+- 單元測試 (UVM 模擬)
+- 集成測試 (硬體-在環)
+- 系統測試 (電源衝擊驗證)
 
-## Interrupt Handler (Software)
+---
 
-**ISR Flow Chart**:
+# TSR-SW-001-01：電源喪失中斷處理程式
+
+**ASIL**：B  
+**衍生自**：SYS-REQ-001-02  
+**類型**：軟體模組  
+**責任**：實施中斷處理和寫入中止
+
+**關鍵職責**：
+1. 接收電源喪失中斷
+2. 停止任何正在進行的寫入
+3. 保存恢復狀態
+4. 通知主機
+
+**代碼組織**：
+- 檔案：`src/firmware/power-loss-handler.c`
+- 函式：`void powerLossInterruptHandler()`
+- 限制：目前無 sleep/等待；WCET < 10µs
+
+**驗證職責**：
+- 單元測試 (中止時序)
+- 集成測試 (寫入+中止場景)
+- 系統測試 (電源故障恢復測試)
+
+---
+
+# TSR-SW-001-02：狀態恢復管理
+
+**ASIL**：B  
+**衍生自**：SYS-REQ-001-02  
+**類型**：軟體模組  
+**責任**：在電源恢復後管理狀態恢復
+
+**關鍵職責**：
+1. 檢查電源喪失標記
+2. 查詢 NAND 狀態
+3. 決定重試或放棄
+4. 重新初始化寫入控制器
+
+**代碼組織**：
+- 檔案：`src/firmware/power-loss-recovery.c`
+- 函式：`void handlePowerLossRecovery()`
+
+**驗證職責**：
+- 單元測試 (恢復邏輯)
+- 集成測試 (各種故障情景)
+- 系統測試 (完整的電源週期)
 ```
-Power Loss Interrupt
-  ├─ Save return address (auto)
-  ├─ Disable interrupts
-  ├─ Read current NAND state
-  ├─ Send NAND abort command
-  ├─ Clear write buffer
-  ├─ Checkpoint state to backup RAM
-  ├─ Set power-loss-flag
-  └─ Enter ultra-low-power wait
-```
 
-**Timing Budget**:
-- Save/restore: 10 cycles (100ns)
-- Disable interrupts: 5 cycles (50ns)
-- NAND abort: 200 cycles (2µs)
-- Buffer clear: 100 cycles (1µs)
-- Checkpoint: 350 cycles (3.5µs)
-- **Total**: 665 cycles (6.65µs) < 500µs ✓
+#### 步驟 8：建立可追蹤性矩陣
 
-## State Checkpoint Format
+建立文檔 `specs/001-power-loss-protection/traceability.md`：
 
-**Backup RAM Layout** (192 bytes):
+```markdown
+# 可追蹤性矩陣 - 特性 001
 
+## 正向可追蹤性 (需求 → 實施)
+
+| 需求 ID | 需求 | 設計 | 代碼 | 測試 | 覆蓋率 |
+|--------|------|------|------|------|---------|
+| SG-001-01 | 防止資料損壞 | arch.md | - | TC-SYS-001 | ✓ |
+| FSR-001-01 | 檢測電源喪失 | architecture.md | power-loss-detector.v | TC-HW-001 | ✓ |
+| FSR-001-02 | 安全中止寫入 | detailed-design.md | power-loss-handler.c | TC-SW-001 | ✓ |
+| SYS-REQ-001-01 | 電源監視器電路 | hw-architecture.md | power_monitor.v | TC-HW-002 | ✓ |
+| SYS-REQ-001-02 | 寫入中止邏輯 | fw-architecture.md | power_loss_handler.c | TC-SW-002 | ✓ |
+
+## 反向可追蹤性 (實施 → 需求)
+
+所有代碼行都應標記為 `@requirement <REQ-ID>`
+
+範例：
 ```c
-typedef struct {
-    uint32_t magic;           // 0x5A5A5A5A
-    uint32_t wear_level_map[16];
-    uint32_t block_state[32];
-    uint16_t command_queue[8];
-    uint32_t crc32;
-} power_loss_checkpoint_t;
-```
-
-**CRC Verification**: CRC32-CCITT on boot to verify integrity
-```
-
----
-
-### Phase 4: Safety Analysis (Days 11-15)
-
-#### Step 1: FMEA
-
-Create `specs/001-power-loss-protection/fmea.md`:
-
-```markdown
-# Failure Mode and Effects Analysis
-
-| ID | Failure Mode | Causes | Effects | S | O | D | RPN | Mitigation | Residual |
-|----|---|---|---|---|---|---|---|---|---|
-| FM-001 | Power detector fails | Component defect | Late/no detection | 10 | 2 | 8 | 160 | Redundant detector + BIST | 40 |
-| FM-002 | Comparator drift | Temperature variation | Missed detection at corner | 9 | 2 | 7 | 126 | Precision trimming + monitoring | 36 |
-| FM-003 | IRQ signal lost | Signal integrity | No handler execution | 10 | 1 | 9 | 90 | Watchdog timer backup | 30 |
-
-**Mitigation Details**:
-
-**FM-001**: Redundant Detector  
-- Primary: Precision comparator  
-- Secondary: Firmware-based voltage monitoring  
-- Both must fail for undetected loss  
-
-**FM-002**: Temperature Compensation  
-- On-chip temperature sensor  
-- Threshold adjusted per temperature  
-- Calibration at manufacturing  
-
-**FM-003**: Watchdog Backup  
-- 1.5ms watchdog triggered on power loss  
-- Forces safe shutdown if IRQ fails  
-- Monitored as separate fault tree
-```
-
-#### Step 2: FTA
-
-Create `specs/001-power-loss-protection/fta.md`:
-
-```markdown
-# Fault Tree Analysis
-
-**Top Event**: Undetected power loss during write operation
-
-## Fault Tree Structure
-
-```
-       Undetected Power Loss
-              |
-        ______+______
-       |             |
-   No Detection   Detection Failed
-   from Circuit    to Execute
-       |               |
-  _____|______      ___|___
- |           |    |       |
-Detector   IRQ   Handler  Write
-Fails      Lost  Timeout  Not Aborted
-```
-
-## Minimal Cut Sets
-
-**1st Order**:
-- Detector IC failure → Undetected power loss
-- Microcontroller IRQ path failure → No handler execution
-- Handler timeout (shouldn't occur) → Write not aborted
-
-**2nd Order** (Common Cause):
-- Voltage rail glitch AND detector threshold miscalibration
-- Temperature excursion AND comparator drift
-
-## Quantitative Analysis
-
-**Top Event Probability** (target): < 1e-7 per power-off event
-
-| Component | Failure Rate | Calc | Probability |
-|---|---|---|---|
-| Detector (primary) | 100 FIT | 1e-7/hr | 8.76e-4/yr |
-| Detector (redundant) | 100 FIT | 1e-7/hr | 8.76e-4/yr |
-| Both fail simultaneously | (1e-7)² | | <1e-14/yr |
-| IRQ path | 50 FIT | 5e-8/hr | 4.38e-4/yr |
-| Watchdog backup | 50 FIT | 5e-8/hr | 4.38e-4/yr |
-
-**Residual Risk**: 1e-13 per power-off (exceeds target) ✓
-```
-
----
-
-### Phase 5: Implementation Verification Plan (Days 16-20)
-
-#### Step 1: Test Specifications
-
-Create `specs/001-power-loss-protection/unit-test-spec.md`:
-
-```markdown
-# Unit Test Specification
-
-## Hardware Unit Tests
-
-### TC-HW-001-001: Power Detector Threshold
-
-**Objective**: Verify power detector triggers at 3.0V threshold
-
-**Test Setup**:
-- Programmable power supply
-- Oscilloscope for latency measurement
-- Detector output connected to logic analyzer
-
-**Test Steps**:
-1. Set supply to 3.3V (nominal operation)
-2. Gradually reduce voltage
-3. Observe at what voltage interrupt triggers
-4. Measure propagation delay
-
-**Expected Results**:
-- Trigger at 3.0V ± 2% across all corners
-- Propagation delay < 1ms
-
-**Acceptance**: Measured threshold within ± 2%, latency < 1ms
-
-### TC-HW-001-002: Power Detector BIST
-
-**Objective**: Verify built-in self-test functionality
-
-**Test Steps**:
-1. Trigger BIST during normal operation
-2. Verify both detectors respond correctly
-3. Check redundancy voting logic
-
-**Acceptance**: BIST reports both detectors operational
-
-## Software Unit Tests
-
-### TC-SW-001-001: Interrupt Handler Execution
-
-**Objective**: Verify power loss handler executes within timing budget
-
-**Test Code**:
-```c
-void test_pwr_loss_handler() {
-    // Setup
-    nand_write_command(0x80);
-    clear_power_loss_flag();
-    
-    // Trigger simulation
-    uint32_t start_time = get_timer();
-    simulate_power_loss_interrupt();
-    uint32_t elapsed = get_timer() - start_time;
-    
-    // Verify
-    assert(elapsed < 500);  // microseconds
-    assert(is_nand_write_aborted());
-    assert(is_checkpoint_valid());
+// @requirement TSR-SW-001-01
+// 檢測電源喪失中斷並停止寫入
+void POWER_LOSS_ISR() {
+    WRITE_CLOCK_DISABLE();  // @requirement TSR-SW-001-01
+    CMD_QUEUE_CLEAR();      // @requirement TSR-SW-001-01
+    STATUS_SET_POWER_LOSS_FLAG();  // @requirement TSR-SW-001-02
 }
 ```
 
-**Coverage**: 100% statement, 100% branch
+## 覆蓋率摘要
 
-### TC-SW-001-002: Checkpoint Integrity
+- 需求涵蓋率：100% (8 個需求有設計/代碼/測試)
+- 代碼涵蓋率：100% (所有行都有 @requirement 標籤)
+- 測試涵蓋率：100% (所有需求都有測試用例)
 
-**Objective**: Verify state checkpoint can be recovered
+**狀態**：✓ 完整且經過驗證
+```
 
-**Test Code**:
+---
+
+### 第 3 階段：架構與設計 (第 4-6 天)
+
+#### 步驟 9：建立系統架構設計
+
+建立 `specs/001-power-loss-protection/architecture.md`：
+
+```markdown
+# 系統架構 - 特性 001：電源喪失保護
+
+## 功能塊圖
+
+```
+    ┌─────────────────────────────────────────────┐
+    │        主機介面 (PCIe/SATA)                 │
+    └────────────┬────────────────────────────────┘
+                 │
+    ┌────────────▼────────────────────────────────┐
+    │      SSD 控制器韌體                         │
+    │  ┌──────────────────────────────────────┐   │
+    │  │  電源喪失中止邏輯                    │   │
+    │  │  - 中止寫入操作                      │   │
+    │  │  - 保存狀態                          │   │
+    │  └──────────────────────────────────────┘   │
+    └────────────┬────────────────────────────────┘
+                 │
+    ┌────────────▼────────────────────────────────┐
+    │      NAND 寫入控制器                        │
+    │  ┌──────────────────────────────────────┐   │
+    │  │  寫入命令隊列                        │   │
+    │  │  寫入計時和同步                      │   │
+    │  └──────────────────────────────────────┘   │
+    └────────────┬────────────────────────────────┘
+                 │
+    ┌────────────▼────────────────────────────────┐
+    │      NAND 快閃記憶體                        │
+    │  ┌──────────────────────────────────────┐   │
+    │  │  多個 NAND 晶片                      │   │
+    │  │  (平行傳輸通道)                      │   │
+    │  └──────────────────────────────────────┘   │
+    └─────────────────────────────────────────────┘
+
+    ┌─────────────────────────────────────────────┐
+    │      電源管理 (1.2V / 3.3V / 5V)           │
+    │  ┌──────────────────────────────────────┐   │
+    │  │  電源監視器 IC                        │   │
+    │  │  - 監視 1.2V 軌                       │   │
+    │  │  - 檢測 < 2.8V 條件                   │   │
+    │  │  - 驅動中斷信號                      │   │
+    │  └──────────────────────────────────────┘   │
+    └────────────┬────────────────────────────────┘
+                 │
+    ┌────────────▼────────────────────────────────┐
+    │      中斷控制器                            │
+    │  ┌──────────────────────────────────────┐   │
+    │  │  路由電源喪失中斷                    │   │
+    │  │  到韌體                              │   │
+    │  └──────────────────────────────────────┘   │
+    └─────────────────────────────────────────────┘
+```
+
+## 信號介面
+
+```markdown
+### 電源監視器 → 韌體
+
+| 信號 | 方向 | 描述 |
+|------|------|------|
+| PWR_LOSS_N | IN | 電源喪失中斷 (低有效) |
+| PWR_MONITOR_RDY | OUT | 監視器準備好 |
+
+### 韌體 → NAND 控制器
+
+| 信號 | 方向 | 描述 |
+|------|------|------|
+| WRITE_ABORT | OUT | 中止現有寫入 |
+| CMD_QUEUE_CLR | OUT | 清除命令隊列 |
+```
+
+## 時序分析
+
+- 電源喪失檢測到韌體中斷：< 1ms
+- 韌體中斷到 NAND 寫入停止：< 10µs
+- 總端到端延遲：< 1.01ms
+- 餘量：> 990µs 用於其他操作
+
+---
+
+### 第 4 階段：安全性分析 (第 7-8 天)
+
+#### 步驟 10：進行 FMEA
+
+建立 `specs/001-power-loss-protection/fmea.md`：
+
+```markdown
+# FMEA - 特性 001：電源喪失保護
+
+| 失效模式 | 嚴重性 | 發生 | 檢測 | RPN | 減輕方案 |
+|---------|--------|------|------|-----|----------|
+| 電源監視器未檢測到喪失 | 10 | 8 | 4 | 320 | 冗餘監視器 + 測試 |
+| 中斷延遲 > 1ms | 9 | 6 | 5 | 270 | 硬體時序設計 |
+| 韌體未停止寫入 | 10 | 3 | 3 | 90 | 代碼審查 + 單元測試 |
+| 恢復邏輯失敗 | 7 | 4 | 4 | 112 | 系統測試 |
+
+**高風險項目** (RPN > 150)：
+- 冗餘監視器
+- 硬體時序驗證
+- 集成測試
+```
+
+#### 步驟 11：進行 FTA
+
+建立 `specs/001-power-loss-protection/fta.md`：
+
+```markdown
+# FTA - 特性 001
+
+## 頂級事件：資料在寫入期間損壞
+
+```
+            ┌─ 檢測失敗
+            │
+頂級事件 ───┼─ 未能中止
+            │
+            └─ 恢復失敗
+```
+
+**最小割集**：
+1. {電源監視器失效} - RPN: 320
+2. {中斷延遲過長} - RPN: 270
+```
+
+---
+
+### 第 5 階段：實施與驗證 (第 9-15 天)
+
+#### 步驟 12：編寫硬體代碼 (Verilog)
+
+建立 `src/hardware/power_loss_detector.v`：
+
+```verilog
+// @requirement TSR-HW-001-01
+// 電源喪失檢測器 - 監視 1.2V 軌，檢測 < 2.8V
+
+module power_loss_detector (
+  input  wire clk,
+  input  wire reset_n,
+  input  wire [11:0] voltage_adc,  // 從 ADC 取樣電壓
+  output reg pwr_loss_n  // 中斷輸出 (低有效)
+);
+
+parameter THRESHOLD = 12'h700;  // 2.8V (12 位 ADC 中 ~1792)
+
+always @(posedge clk or negedge reset_n)
+  if (!reset_n)
+    pwr_loss_n <= 1'b1;
+  else if (voltage_adc < THRESHOLD)
+    pwr_loss_n <= 1'b0;  // @requirement TSR-HW-001-01
+  else
+    pwr_loss_n <= 1'b1;
+
+endmodule
+```
+
+#### 步驟 13：編寫韌體代碼 (C)
+
+建立 `src/firmware/power_loss_handler.c`：
+
 ```c
-void test_checkpoint_recovery() {
-    // Save reference state
-    power_loss_checkpoint_t ref_state = get_current_state();
+// @requirement TSR-SW-001-01
+// 電源喪失中斷處理程式
+
+#include "nand_controller.h"
+#include "power_manager.h"
+
+volatile uint8_t power_loss_detected = 0;
+
+// @requirement TSR-SW-001-01
+void POWER_LOSS_ISR(void) {
+  // 禁用寫入時鐘
+  WRITE_CLOCK_DISABLE();  // @requirement TSR-SW-001-01
+  
+  // 清除命令隊列
+  CMD_QUEUE_CLEAR();  // @requirement TSR-SW-001-01
+  
+  // 設定狀態標記
+  power_loss_detected = 1;  // @requirement TSR-SW-001-02
+}
+
+// @requirement TSR-SW-001-02
+void handle_power_loss_recovery(void) {
+  if (power_loss_detected) {
+    // 查詢 NAND 狀態
+    uint8_t nand_status = NAND_READ_STATUS();
     
-    // Simulate power loss
-    simulate_power_loss_checkpoint();
+    // 重新初始化控制器
+    NAND_SOFT_RESET();
     
-    // Power back on
-    power_on_reset();
-    power_loss_checkpoint_t recovered = load_checkpoint();
-    
-    // Verify
-    assert(recovered.crc32 == calculate_crc32(&recovered));
-    assert_equal_state(&ref_state, &recovered);
+    // 報告給主機
+    notify_host_power_loss();
+  }
 }
 ```
 
-**Coverage**: 100% statement, 100% branch
-```
+#### 步驟 14：編寫測試用例
 
-#### Step 2: Integration Test Specification
+建立 `src/test/test_power_loss.py`：
 
-Create `specs/001-power-loss-protection/integration-test-spec.md`:
+```python
+# @requirement TC-HW-001, TC-SW-001
+import pytest
+from power_loss_simulator import PowerLossSimulator
 
-```markdown
-# Integration Test Specification
-
-## Hardware/Firmware Integration
-
-### TC-INT-001-001: Power Loss Detection to Write Abort
-
-**Objective**: Verify end-to-end power loss handling
-
-**Test Setup**:
-- SSD with power monitor and NAND controller
-- Live NAND flash with data
-- Power supply switchable between operation and test mode
-
-**Test Scenario**:
-1. Initiate NAND write to known block
-2. After 50% of write command completes, simulate power loss
-3. Power restored after 100ms
-4. Verify write was aborted (data not written)
-
-**Acceptance**:
-- Write command fails (error status returned on recovery)
-- Written data checksum different from expected
-- No data corruption to adjacent blocks
-
-### TC-INT-001-002: Backup Power Verification
-
-**Objective**: Verify backup capacitors support state checkpoint
-
-**Test**:
-1. Monitor backup power voltage during power loss event
-2. Measure available time window for checkpoint
-3. Verify checkpoint completes before backup voltage collapses
-
-**Acceptance**: Checkpoint completes with > 50% voltage margin
-```
-
----
-
-### Phase 6: Safety Analysis Documents
-
-#### Step 1: Create FMEA, FTA, DFA (as shown above)
-
-Then create summary: `specs/001-power-loss-protection/change-log.md`
-
-```markdown
-# Change Log
-
-| Version | Date | Change | Reason | Approved |
-|---------|------|--------|--------|----------|
-| 1.0 | 2025-12-20 | Initial feature release | Feature complete | Jane Lead |
-| 1.1 | 2025-12-25 | Latency requirement: 1ms → 500µs | Customer feedback | Bob Safety |
-| 1.2 | 2026-01-05 | Added redundant detector | Risk assessment | Safety Mgr |
+class TestPowerLossProtection:
+    
+    # @requirement TC-HW-001
+    def test_power_loss_detection(self):
+        """驗證電源喪失在 < 1ms 內被檢測"""
+        sim = PowerLossSimulator()
+        
+        # 將電壓降至 2.8V
+        sim.set_voltage(2.8)
+        
+        # 測量檢測延遲
+        detection_time = sim.measure_interrupt_latency()
+        
+        assert detection_time < 1.0, "檢測延遲超出規格"
+        assert sim.interrupt_triggered, "中斷未觸發"
+    
+    # @requirement TC-SW-001
+    def test_write_abort(self):
+        """驗證寫入在檢測到電源喪失後被中止"""
+        sim = PowerLossSimulator()
+        
+        # 啟動寫入操作
+        sim.start_nand_write(data=b'\xFF' * 4096)
+        
+        # 模擬電源喪失
+        sim.trigger_power_loss()
+        
+        # 驗證寫入已停止
+        abort_time = sim.measure_write_abort_time()
+        assert abort_time < 10.0, "寫入中止延遲超出規格"
+        assert sim.nand_write_completed == False, "寫入未中止"
 ```
 
 ---
 
-### Phase 7: Traceability Matrix
+### 第 6 階段：審查與批准 (第 16-17 天)
 
-Create/Update `specs/001-power-loss-protection/traceability.md` using [TRACEABILITY-MATRIX-TEMPLATE.md](TRACEABILITY-MATRIX-TEMPLATE.md)
+#### 步驟 15：進行設計審查
 
----
+組織會議討論：
+- 架構設計
+- FMEA 結果
+- 測試計畫
 
-### Phase 8: Final Reviews and Approval
+簽署： `review-records/design-review-signed.md`
 
-#### Code Review
+#### 步驟 16：進行代碼審查
 
-Create `review-records/code-review.md`:
+- 檢查編碼標準 (MISRA C)
+- 驗證可追蹤性標籤
+- 測量代碼涵蓋率 (目標：100%)
 
-```markdown
-# Code Review Meeting
+簽署： `review-records/code-review-signed.md`
 
-**Date**: 2026-01-10  
-**Reviewed Files**:
-- firmware/power_manager.c
-- rtl/power_monitor.v
-- tests/test_power_manager.c
+#### 步驟 17：進行驗證審查
 
-**Checklist**:
-- [x] Coding standards (MISRA C for firmware, SystemVerilog for RTL)
-- [x] Traceability tags present (@requirement, @test-case)
-- [x] No violations of architectural patterns
-- [x] Coverage metrics acceptable (100% statement, branch)
-- [x] Error handling complete
-- [x] No memory leaks (firmware)
-- [x] Performance requirements met
+- 驗證所有測試通過
+- 測試涵蓋率 = 100% (所有 SYS-REQ 都有測試)
+- 無孤立代碼
 
-**Issues**: None critical - minor comments addressed
-
-**Approval**: ✓ John Developer (Peer), ✓ Lead Reviewer
-```
-
-#### Verification Review
-
-Create `review-records/verification-review.md`:
-
-```markdown
-# Verification Review
-
-**Date**: 2026-01-15
-
-**Test Execution Summary**:
-- Unit tests (HW): 15/15 PASS
-- Unit tests (FW): 12/12 PASS
-- Integration tests: 8/8 PASS
-- System tests: 5/5 PASS
-
-**Coverage Metrics**:
-- Statement coverage: 100%
-- Branch coverage: 100%
-- Functional coverage: 100%
-
-**Defects**: 0 critical, 0 major, 3 minor (all resolved)
-
-**Sign-off**:
-✓ Test Lead  
-✓ Quality Manager  
-✓ Safety Manager
-```
+簽署： `review-records/verification-review-signed.md`
 
 ---
 
-## Automation Commands
+### 第 7 階段：基線與發佈 (第 18 天)
 
-### Create Feature
+#### 步驟 18：建立基線
 
-```powershell
-.\create-feature.ps1 `
-  -Name "Power Loss Protection" `
-  -ASIL "B" `
-  -Type "System" `
-  -Owner "John Smith"
+```bash
+# 在 Git 中標記特性版本
+git tag -a "001-power-loss-protection-v1.0" \
+  -m "Feature 001: Power Loss Protection - Released for product build v2.5"
+
+# 推送到存儲庫
+git push origin 001-power-loss-protection-v1.0
 ```
 
-### Check Traceability
+#### 步驟 19：建立發佈文檔
 
-```powershell
-.\check-traceability.ps1 -Feature "001-power-loss-protection"
-# Output: Traceability report, identifies gaps
+建立 `specs/001-power-loss-protection/RELEASE-NOTES.md`：
+
+```markdown
+# 發佈說明 - 特性 001：電源喪失保護
+
+**版本**：1.0.0  
+**發佈日期**：2025-12-24  
+**狀態**：生產就緒
+
+## 摘要
+
+此特性實施了檢測和減輕 NAND 寫入期間電源喪失的能力。此功能對於防止資料損壞至關重要，並支援 SSD 韌體進行安全的電源序列化。
+
+## 驗證結果
+
+✓ 所有 8 個需求已實施和測試  
+✓ 代碼涵蓋率：100%  
+✓ FMEA 風險優先數 < 200  
+✓ 檢測延遲 < 1ms  
+✓ 所有設計/代碼/驗證審查已簽署
+
+## 已知限制
+
+無
+
+## 後續步驟
+
+- 將此特性整合到產品組建 v2.5
+- 執行系統級驗收測試
+- 發佈給客戶進行聯合驗收測試 (JAT)
 ```
 
-### Run Change Impact Analysis
+---
+
+## 檢查清單
+
+按順序完成以下步驟：
+
+- [ ] **第 1 階段**：特性初始化
+  - [ ] 範圍已定義
+  - [ ] ASIL 已確定
+  - [ ] 目錄結構已建立
+  - [ ] 特性概述已編寫
+
+- [ ] **第 2 階段**：需求分析
+  - [ ] SG 已定義 (安全目標)
+  - [ ] FSR 已衍生 (功能安全需求)
+  - [ ] SYS-REQ 已開發 (系統需求)
+  - [ ] TSR 已配置 (技術安全需求)
+  - [ ] 可追蹤性矩陣已初始化
+
+- [ ] **第 3 階段**：架構與設計
+  - [ ] 系統架構已記錄
+  - [ ] 硬體架構已設計
+  - [ ] 軟體架構已設計
+  - [ ] 信號介面已定義
+  - [ ] 時序分析已完成
+
+- [ ] **第 4 階段**：安全性分析
+  - [ ] FMEA 已完成
+  - [ ] 高風險項目已識別
+  - [ ] 減輕方案已提議
+  - [ ] FTA 已完成
+  - [ ] DFA 已完成
+
+- [ ] **第 5 階段**：實施與驗證
+  - [ ] 硬體代碼已實施
+  - [ ] 軟體代碼已實施
+  - [ ] 單元測試已執行
+  - [ ] 代碼涵蓋率 = 100%
+  - [ ] 集成測試已執行
+  - [ ] 系統測試已執行
+  - [ ] 可追蹤性已驗證
+
+- [ ] **第 6 階段**：審查與批准
+  - [ ] 設計審查已完成和簽署
+  - [ ] 代碼審查已完成和簽署
+  - [ ] 驗證審查已完成和簽署
+
+- [ ] **第 7 階段**：基線與發佈
+  - [ ] Git 標籤已建立
+  - [ ] 發佈說明已編寫
+  - [ ] 特性已存檔
+
+---
+
+## 有用的 PowerShell 命令
 
 ```powershell
-.\check-change-impact.ps1 `
-  -File "firmware/power_manager.c" `
-  -ChangeType "implementation"
-# Output: Lists all affected requirements, design docs, tests
-```
+# 驗證可追蹤性
+.\check-traceability.ps1 -Feature "001-power-loss-protection" -Report
 
-### Verify Coverage
-
-```powershell
+# 檢查需求涵蓋率
 .\check-requirements-coverage.ps1 -Feature "001-power-loss-protection"
-# Output: Coverage report, shows what's missing
+
+# 檢查變更影響
+.\check-change-impact.ps1 -Feature "001-power-loss-protection" -File "requirements.md"
+
+# 查看特性狀態
+git log --oneline 001-power-loss-protection
+
+# 查看所有特性
+Get-ChildItem specs/ | Where-Object {$_.Name -match "^\d{3}-"}
 ```
 
 ---
 
-## Best Practices
+## 常見問題
 
-✅ **DO**:
-- Start with hazard analysis (HARA) output
-- Involve safety expert early
-- Review requirements before design
-- Maintain traceability continuously
-- Automate traceability checks
-- Document all decisions with rationale
+**Q：我不確定 ASIL 應該是什麼？**  
+A：查閱 HARA 分析文檔或詢問安全經理。如有疑問，選擇更高的 ASIL 值(更嚴格)。
 
-❌ **DON'T**:
-- Create design without requirements review
-- Skip safety analysis (FMEA/FTA/DFA)
-- Have orphan code without traceability
-- Change requirements without impact analysis
-- Skip final verification review
-- Archive without version control
+**Q：我可以跳過任何階段嗎？**  
+A：否。每個階段都完成了前期階段相依的特定工作產品。跳過階段會留下追蹤間隙。
+
+**Q：測試涵蓋率目標真的是 100% 嗎？**  
+A：是的，針對 ASIL-B 及以上。任何無法測試的代碼必須進行正當理由說明並記錄。
+
+**Q：是否有工具可以幫助我？**  
+A：是的。查看 `.specify/scripts/` 中的自動化指令碼。
 
 ---
 
-## Common Pitfalls and Solutions
-
-| Pitfall | Problem | Solution |
-|---------|---------|----------|
-| Requirements too vague | "System shall be fast" | Use acceptance criteria: "< 1ms" |
-| Incomplete allocation | TSR doesn't cover SYS-REQ | Review checklist: all SYS-REQ → TSR |
-| Lost traceability | Code changes, tests not updated | Auto-trace extraction from source |
-| Cascading changes | One requirement change affects 10 items | Change impact analysis script |
-| No safety analysis | Unknown failure modes | FMEA/FTA/DFA required for ASIL-B |
-
----
-
-## Next Steps After Feature Complete
-
-1. ✓ Baseline feature in Git (tag: `001-v1.0`)
-2. ✓ Archive all review records
-3. ✓ Create lesson-learned notes
-4. ✓ Begin planning dependent features
-5. ✓ Start next feature using same process
-
-**Questions?** Contact: Safety Manager, Technical Lead, or Process Owner
+**文檔版本**：1.0.0  
+**最後更新**：2025-12-02  
+**下次審查**：2026-03-02
