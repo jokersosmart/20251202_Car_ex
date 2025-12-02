@@ -31,7 +31,17 @@
 
 *GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
 
-[Gates determined based on constitution file]
+**Required Compliance**:
+- [ ] Requirements traceability: Feature maps to system/stakeholder requirements per Principle I
+- [ ] Verification strategy defined: Unit/integration/qualification tests planned per Principle II
+- [ ] Code quality standards: MISRA C:2012 (firmware) and SystemVerilog guidelines identified per Principle III
+- [ ] Git/CM process: Branching strategy, baseline plan identified per Principle IV
+- [ ] Documentation plan: Required ASPICE work products identified per Principle V
+- [ ] Phase gates: Identified which ASPICE process areas apply (SYS.1-5, SWE.1-6, HWE.1-5, SUP.1-2,4,7-10)
+
+**Deviations from Constitution** (if any):
+- [ ] Justified with technical rationale in Complexity Tracking section below
+- [ ] Approved by technical lead before proceeding
 
 ## Project Structure
 

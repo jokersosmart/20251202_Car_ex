@@ -80,6 +80,10 @@
 <!--
   ACTION REQUIRED: The content in this section represents placeholders.
   Fill them out with the right functional requirements.
+  
+  NOTE: Per Constitution Principle I (Requirements-Driven Development),
+  every requirement MUST be traceable to system/stakeholder needs and
+  MUST be verifiable through tests.
 -->
 
 ### Functional Requirements
@@ -99,6 +103,12 @@
 
 - **[Entity 1]**: [What it represents, key attributes without implementation]
 - **[Entity 2]**: [What it represents, relationships to other entities]
+
+### Traceability Links
+- **Stakeholder Requirements**: [Links to SYS.1 requirements, e.g., "PCIe Gen5 support"]
+- **System Requirements**: [Links to SYS.2 requirements, e.g., "32 GT/s link speed"]
+- **Hardware Requirements** (if applicable): [Links to HWE.1]
+- **Software Requirements** (if applicable): [Links to SWE.1]
 
 ## Success Criteria *(mandatory)*
 

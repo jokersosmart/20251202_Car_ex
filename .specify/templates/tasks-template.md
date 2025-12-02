@@ -8,7 +8,11 @@ description: "Task list template for feature implementation"
 **Input**: Design documents from `/specs/[###-feature-name]/`
 **Prerequisites**: plan.md (required), spec.md (required for user stories), research.md, data-model.md, contracts/
 
-**Tests**: The examples below include test tasks. Tests are OPTIONAL - only include them if explicitly requested in the feature specification.
+**Tests**: Per Constitution Principle II (Verification at All Levels), testing is MANDATORY at all levels:
+- Unit tests MUST achieve 100% statement + 100% branch coverage (firmware per SWE.4, RTL per HWE.4)
+- Integration tests MUST verify interface contracts (SWE.5, HWE.5)
+- Qualification tests MUST verify customer requirements (SWE.6, HWE.5, SYS.5)
+- Peer code reviews REQUIRED per Principle III before any merge
 
 **Organization**: Tasks are grouped by user story to enable independent implementation and testing of each story.
 
