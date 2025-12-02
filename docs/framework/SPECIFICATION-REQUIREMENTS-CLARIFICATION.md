@@ -121,7 +121,7 @@ FSR-001: VDD 電壓低保護
 當輸入電壓 VDD 低於 2.7V 時，系統必須在 10ms 內進入安全狀態，
 以防止快閃記憶體資料遺失。
 
-ASIL 等級: ASIL-D
+ASIL 等級: ASIL-B
 來源 (SG): SG-001 (確保電源故障時資料完整)
 邊界條件:
   - 正常工作電壓: 3.3V ± 5% (3.135V - 3.465V)
@@ -220,7 +220,7 @@ VDD 監控電路必須使用比較器電路持續監控輸入電壓，
 FAULT 信號必須保持高電平至故障清除。
 
 對應 SysReq: SysReq-001 (硬體部分)
-ASIL 等級: ASIL-D
+ASIL 等級: ASIL-B
 分類: 故障檢測
 實現邊界:
   - 硬體: 比較器 + 計時電路 + 輸出緩衝
@@ -243,7 +243,7 @@ TSR-002: 軟體故障檢測和反應
 觸發故障管理器進入故障處理狀態機。
 
 對應 SysReq: SysReq-001 (軟體部分)
-ASIL 等級: ASIL-D
+ASIL 等級: ASIL-B
 分類: 故障檢測 + 控制
 實現邊界:
   - 硬體: 中斷線路 (FAULT → IRQ)
@@ -296,7 +296,7 @@ HSR-001: VDD 監控比較器
 監控電路本身的故障（如比較器失效）必須由冗餘監控路徑檢測。
 
 對應 TSR: TSR-001
-ASIL 等級: ASIL-D
+ASIL 等級: ASIL-B
 實現模塊: VDD Monitor Circuit (AFE Subsystem)
 故障安全狀態: FAULT 默認低 (無故障)；故障時高 (故障)
 驗證層級: 單元測試（硬體仿真）+ 後矽驗證
@@ -334,7 +334,7 @@ SysMon 監控任務每 2.5ms 檢查一次 FAULT 信號。
 代碼必須符合 MISRA C:2012 標準（零關鍵違規）。
 
 對應 TSR: TSR-002
-ASIL 等級: ASIL-D
+ASIL 等級: ASIL-B
 實現模塊: System Monitor Service (SysMon)
 實現語言: C99 with MISRA C:2012
 驗證層級: 單元測試 + 整合測試
@@ -467,18 +467,18 @@ HSR/SSR 的 ASIL = X (繼承 TSR 的等級)
 
 **例**:
 ```
-FSR-001 (ASIL-D) 
-  → TSR-001 (ASIL-D)
-    → HSR-001 (ASIL-D)
-    → SSR-001 (ASIL-D)
+FSR-001 (ASIL-B) 
+  → TSR-001 (ASIL-B)
+    → HSR-001 (ASIL-B)
+    → SSR-001 (ASIL-B)
 ```
 
 #### 規則 2：升級（需論證）
 ```
 若 TSR 的失效會導致安全功能完全喪失，可升級
 
-例: TSR-001 (ASIL-C) 是單點故障，無冗餘
-  → 升級為 ASIL-D
+例: TSR-001 (ASIL-A) 是單點故障，無冗餘
+  → 升級為 ASIL-B
   
 需文檔化: 
 - 為何需要升級的技術論證
@@ -492,11 +492,11 @@ FSR-001 (ASIL-D)
 可基於 ISO 26262-3 Part 8 獨立故障假設降級
 
 例: 
-  TSR-001 (ASIL-D)
-    → HSR-001 (ASIL-D) + SSR-001 (ASIL-D)
+  TSR-001 (ASIL-B)
+    → HSR-001 (ASIL-B) + SSR-001 (ASIL-B)
     
 若硬體故障和軟體故障不相關，可組合為:
-  等效 ASIL = ASIL-B (因為雙重故障概率降低)
+  等效 ASIL = ASIL-A (因為雙重故障概率降低)
 
 需論證:
 - 硬體故障模式 vs 軟體故障模式
