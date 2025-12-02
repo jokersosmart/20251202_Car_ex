@@ -207,7 +207,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 3.3 VDD 硬體驗證 (UVM)
 
-- [ ] T020 [P] 實現 VDD 監控功能測試 UVM 驗證
+- [X] T020 [P] 實現 VDD 監控功能測試 UVM 驗證
   - 位置：[verification/testbench/power_monitor_tb.sv](../../../verification/testbench/power_monitor_tb.sv)
   - 驗收標準：
     - 40 個測試用例 (來自 research.md Task 2)
@@ -215,7 +215,7 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
     - 所有電壓掃描通過
     - 遲滯驗證正確
 
-- [ ] T021 [P] 實現 VDD 故障注入測試
+- [X] T021 [P] 實現 VDD 故障注入測試
   - 位置：[verification/tests/vdd_fault_injection_test.sv](../../../verification/tests/vdd_fault_injection_test.sv)
   - 驗收標準：
     - 36 個 VDD 監控故障 (SA0 + SA1 + Delay)
@@ -224,14 +224,14 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 3.4 電源軟體驗證 (pytest)
 
-- [ ] T022 [P] 實現電源監控單元測試
+- [X] T022 [P] 實現電源監控單元測試
   - 位置：[firmware/tests/unit/test_pwr_monitor.py](../../../firmware/tests/unit/test_pwr_monitor.py)
   - 驗收標準：
     - 20 個單元測試用例
     - 測試 fault flag 設置、清除、查詢
     - SC ≥ 100%, BC ≥ 100%
 
-- [ ] T023 實現電源故障整合測試
+- [X] T023 實現電源故障整合測試
   - 位置：[firmware/tests/integration/test_pwr_fault_scenarios.py](../../../firmware/tests/integration/test_pwr_fault_scenarios.py)
   - 驗收標準：
     - 10 個場景測試 (單故障、多故障、優先級)
@@ -240,14 +240,14 @@ Setup → Foundational → US1, US2 (並行) → US3, US4 (並行)
 
 ### 3.5 電源文檔和追蹤
 
-- [ ] T024 [P] 為 VDD 監控電路編寫 RTL 設計文檔
+- [X] T024 [P] 為 VDD 監控電路編寫 RTL 設計文檔
   - 位置：[docs/architecture/vdd_monitor_design.md](../../../docs/architecture/vdd_monitor_design.md)
   - 驗收標準：
     - 包含原理圖描述
     - 時序分析
     - 溫度係數漂移分析 (根據 research.md Task 5)
 
-- [ ] T025 [P] 創建電源安全功能的追蹤矩陣
+- [X] T025 [P] 創建電源安全功能的追蹤矩陣
   - 位置：[docs/analysis/traceability_us1.md](../../../docs/analysis/traceability_us1.md)
   - 驗收標準：
     - SG-001 → FSR-001 → SysReq-001 → TSR-001
