@@ -1,12 +1,3 @@
-我已為你的專案準備好一份 README.md，內容涵蓋如何下載（git clone、下載 ZIP、使用 GitHub CLI）、常見的安裝與執行範例（Python / Node / Java / 靜態網頁），以及貢獻與常見問題指引。接下來你可以把這個 README.md 放到專案根目錄；如果你告訴我專案的主要語言或啟動指令，我可以幫你把範例命令調整為精確的可執行步驟。下面是檔案：
-
-````markdown name=README.md url=https://github.com/jokersosmart/20251202_Car_ex/blob/main/README.md
-# 20251202_Car_ex
-
-簡短描述：在這裡放一段一兩句話的專案說明（例如：本專案為汽車相關練習範例程式，包含數據處理與範例視覺化）。
-
-> 將以下內容放到專案根目錄的 README.md 中，並依專案實際語言與啟動檔調整範例指令。
-
 ## 目錄
 - [下載](#下載)
 - [必要環境](#必要環境)
